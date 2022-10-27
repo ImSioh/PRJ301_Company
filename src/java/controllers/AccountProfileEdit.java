@@ -18,10 +18,10 @@ public class AccountProfileEdit extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (request.getSession().getAttribute("AccSession") == null) {
+        if (request.getSession().getAttribute("accSession") == null) {
             response.sendRedirect("signin");
         } else {
-            Account acc = (Account) request.getSession().getAttribute("AccSession");
+            Account acc = (Account) request.getSession().getAttribute("accSession");
             String cID = acc.getCustomerID();
             Customer cus = new CustomerDAO().getCustomerById(cID);
             request.setAttribute("customer", cus);

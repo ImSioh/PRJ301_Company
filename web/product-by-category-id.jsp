@@ -5,12 +5,6 @@
 
 <%@include file="template/header.jsp" %>
 
-<%
-    if(request.getSession().getAttribute("AccSession")!=null) {
-        Account acc = (Account)request.getSession().getAttribute("AccSession");
-        out.print("Welcome: " + acc.getEmail());
-    }
-%>
 <div id="content">
     <div id="content-left">
         <h3>CATEGORY</h3>
@@ -63,6 +57,5 @@
         </div>
     </div>
 </div>
-
 
 <%@include file="template/footer.jsp" %>

@@ -28,7 +28,7 @@ public class ProductEdit extends HttpServlet {
         CategoryDAO cd = new CategoryDAO();
         ArrayList<Category> c = cd.getCategory();
         request.setAttribute("category", c);
-        if (request.getSession().getAttribute("AccSession") != null) {
+        if (request.getSession().getAttribute("accSession") != null) {
             request.getRequestDispatcher("product-edit.jsp").forward(request, response);
         } else {
             response.sendRedirect("product-list");

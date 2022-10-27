@@ -29,8 +29,8 @@ public class CartServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (request.getSession().getAttribute("AccSession") != null) {
-            Account acc = (Account) request.getSession().getAttribute("AccSession");
+        if (request.getSession().getAttribute("accSession") != null) {
+            Account acc = (Account) request.getSession().getAttribute("accSession");
             String cID = acc.getCustomerID();
             Customer cus = new CustomerDAO().getCustomerById(cID);
             request.setAttribute("customer", cus);
@@ -42,7 +42,7 @@ public class CartServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (request.getSession().getAttribute("AccSession") == null) {
+        if (request.getSession().getAttribute("accSession") == null) {
             String compName = request.getParameter("compName");
             String contName = request.getParameter("contName");
             String contTitle = request.getParameter("contTitle");
