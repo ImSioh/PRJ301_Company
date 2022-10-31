@@ -49,61 +49,20 @@
                             <td>${o.freight}</td>
                             <c:choose>
                                 <c:when test="${o.shippedDate!=null}">
-                                    <td style="color: green;">Completed</td>
+                                    <td style="color: green; font-weight: bold">Completed</td>
                                 </c:when>
                                 <c:when test="${o.shippedDate==null}">
-                                    <td style="color: blue;">Pending | <a href="#">Cancel</a></td>
+                                    <td style="color: blue; font-weight: bold">Pending | <a href="#" style="color: red; font-weight: bold; text-decoration: none;">Cancel</a></td>
                                 </c:when>
                                 <c:when test="${o.shippedDate > o.requiredDate}">
                                     <td style="color: red; font-weight: bold">Out of date</td>
                                 </c:when>
                                 <c:otherwise>
-                                    <td style="color: red;">Order canceled</td>
+                                    <td style="color: red; font-weight: bold">Order canceled</td>
                                 </c:otherwise>
                             </c:choose>
                         </tr>
                     </c:forEach>
-
-                    <tr>
-                        <td><a href="#">#4</a></td>
-                        <td>11-10-2022</td>
-                        <td>12-10-2022</td>
-                        <td>11-10-2022</td>
-                        <td>Tom</td>
-                        <td>Susue</td>
-                        <td>300</td>
-                        <td style="color: green;">Completed</td>
-                    </tr>
-                    <tr>
-                        <td><a href="#">#3</a></td>
-                        <td>11-10-2022</td>
-                        <td>12-10-2022</td>
-                        <td></td>
-                        <td>Tom</td>
-                        <td>John</td>
-                        <td>1000</td>
-                        <td style="color: blue;">Pending | <a href="#">Cancel</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="#">#2</a></td>
-                        <td>10-10-2022</td>
-                        <td>12-10-2022</td>
-                        <td></td>
-                        <td>Marry</td>
-                        <td>Ronaldo</td>
-                        <td>1500</td>
-                        <td style="color: red;">Order canceled</td>
-                    </tr>
-                    <tr>
-                        <td><a href="#">#1</a></td>
-                        <td>09-10-2022</td>
-                        <td>10-10-2022</td>
-                        <td>11-10-2022</td>
-                        <td>Marry</td>
-                        <td>David</td>
-                        <td>200</td>
-                        <td style="color: green;">Completed</td>
-                    </tr>
                 </table>
             </div>
             <div id="paging">
