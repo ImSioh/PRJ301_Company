@@ -158,6 +158,20 @@ public class Orders {
         this.shipCountry = ShipCountry;
     }
 
+    public String getStatus() {
+        String status = "";
+        if (this.getRequiredDate()!=null && this.getShippedDate()==null){
+            status = "pending";
+        }
+        else if (this.getRequiredDate()!=null && this.getShippedDate()!=null){
+            status = "completed";
+        }
+        else{
+            status = "cancel";
+        }
+        return status;
+    }    
+    
     @Override
     public String toString() {
         return "Orders{" + "OrderID=" + orderID + ", CustomerID=" + customerID + ", EmployeeID=" + employeeID + ", OrderDate=" + orderDate + ", RequiredDate=" + requiredDate + ", ShippedDate=" + shippedDate + ", Freight=" + freight + ", ShipName=" + shipName + ", ShipAddress=" + shipAddress + ", ShipCity=" + shipCity + ", ShipRegion=" + shipRegion + ", ShipPostalCode=" + shipPostalCode + ", ShipCountry=" + shipCountry + '}';

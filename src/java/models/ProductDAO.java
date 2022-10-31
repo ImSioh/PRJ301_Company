@@ -38,6 +38,7 @@ public class ProductDAO extends DBContext {
     }
 
     public Product getProductById(int ProductID) {
+        
         try {
             String sql = "select * from Products where ProductID = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -58,6 +59,36 @@ public class ProductDAO extends DBContext {
                 Product p = new Product(ProductID2, ProductName, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued);
                 return p;
             }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public ArrayList<Product> getProductByKeyword(String keyword) {
+                ArrayList<Product> pro = new ArrayList<>();
+        try {
+            String sql = "select * from Products\n"
+                    + "where ProductName like ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, "%"+keyword+"%");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int ProductID2 = rs.getInt(1);
+                String ProductName = rs.getString(2);
+                int CategoryID = rs.getInt(3);
+                String QuantityPerUnit = rs.getString(4);
+                double UnitPrice = rs.getDouble(5);
+                int UnitsInStock = rs.getInt(6);
+                int UnitsOnOrder = rs.getInt(7);
+                int ReorderLevel = rs.getInt(8);
+                boolean Discontinued = rs.getBoolean(9);
+
+                Product p = new Product(ProductID2, ProductName, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued);
+                pro.add(p);
+            }
+            return pro;
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -332,11 +363,16 @@ public class ProductDAO extends DBContext {
 //                break;
 //            }
 //        }
-        Product p = new Product(100, "ProductName", 8, "QuantityPerUnit", 12345, 123, 12, 1, true);
-        int check = new ProductDAO().createProduct(p);
-        System.out.println("check = " + check);
+//        Product p = new Product(100, "ProductName", 8, "QuantityPerUnit", 12345, 123, 12, 1, true);
+//        int check = new ProductDAO().createProduct(p);
+//        System.out.println("check = " + check);
 
-        ArrayList<Product> list = new ProductDAO().getProduct();
+//        ArrayList<Product> list = new ProductDAO().getProduct();
+//        for (Product product : list) {
+//            System.out.println(product);
+//        }
+        
+        ArrayList<Product> list = new ProductDAO().getProductByKeyword("ch");
         for (Product product : list) {
             System.out.println(product);
         }

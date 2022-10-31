@@ -6,6 +6,17 @@
 
 <%@include file="template/header2.jsp" %>
 
+<script>
+
+    function warnCancel() {
+        if (confirm("Cancel order will not be reverted! Do you want to continue?")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>
+
 <div id="content-right">
     <div class="path-admin">ORDERS LIST</b></div>
     <div class="content-main">
@@ -17,7 +28,14 @@
                     To: <input type="date" name="txtEndOrderDate"/>
                     <input type="submit" value="Filter">
                 </form>
+
+                <form>
+                    <input type="text" name="txtSearch" placeholder="Enter order id to search"/>
+                    <input type="submit" value="Search"/>
+                </form>
+
             </div>
+
             <div id="order-table">
                 <table id="orders">
                     <tr>
@@ -48,14 +66,11 @@
                             </c:forEach>
                             <td>${o.freight}</td>
                             <c:choose>
-                                <c:when test="${o.shippedDate!=null}">
+                                <c:when test="${o.getStatus() eq 'completed'}">
                                     <td style="color: green;">Completed</td>
                                 </c:when>
-                                <c:when test="${o.shippedDate==null}">
-                                    <td style="color: blue;">Pending | <a href="#">Cancel</a></td>
-                                </c:when>
-                                <c:when test="${o.shippedDate > o.requiredDate}">
-                                    <td style="color: red; font-weight: bold">Out of date</td>
+                                <c:when test="${o.getStatus() eq 'pending'}">
+                                    <td style="color: blue;">Pending | <a href="order-list?action=cancel&id=${o.getOrderID()}" onclick="return warnCancel()">Cancel</a></td>
                                 </c:when>
                                 <c:otherwise>
                                     <td style="color: red;">Order canceled</td>
@@ -64,46 +79,46 @@
                         </tr>
                     </c:forEach>
 
-                    <tr>
-                        <td><a href="#">#4</a></td>
-                        <td>11-10-2022</td>
-                        <td>12-10-2022</td>
-                        <td>11-10-2022</td>
-                        <td>Tom</td>
-                        <td>Susue</td>
-                        <td>300</td>
-                        <td style="color: green;">Completed</td>
-                    </tr>
-                    <tr>
-                        <td><a href="#">#3</a></td>
-                        <td>11-10-2022</td>
-                        <td>12-10-2022</td>
-                        <td></td>
-                        <td>Tom</td>
-                        <td>John</td>
-                        <td>1000</td>
-                        <td style="color: blue;">Pending | <a href="#">Cancel</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="#">#2</a></td>
-                        <td>10-10-2022</td>
-                        <td>12-10-2022</td>
-                        <td></td>
-                        <td>Marry</td>
-                        <td>Ronaldo</td>
-                        <td>1500</td>
-                        <td style="color: red;">Order canceled</td>
-                    </tr>
-                    <tr>
-                        <td><a href="#">#1</a></td>
-                        <td>09-10-2022</td>
-                        <td>10-10-2022</td>
-                        <td>11-10-2022</td>
-                        <td>Marry</td>
-                        <td>David</td>
-                        <td>200</td>
-                        <td style="color: green;">Completed</td>
-                    </tr>
+                    <!--                    <tr>
+                                            <td><a href="#">#4</a></td>
+                                            <td>11-10-2022</td>
+                                            <td>12-10-2022</td>
+                                            <td>11-10-2022</td>
+                                            <td>Tom</td>
+                                            <td>Susue</td>
+                                            <td>300</td>
+                                            <td style="color: green;">Completed</td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#">#3</a></td>
+                                            <trtd>11-10-2022</td>
+                                            <td>12-10-2022</td>
+                                            <td></td>
+                                            <td>Tom</td>
+                                            <td>John</td>
+                                            <td>1000</td>
+                                            <td style="color: blue;">Pending | <a href="#">Cancel</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#">#2</a></td>
+                                            <td>10-10-2022</td>
+                                            <td>12-10-2022</td>
+                                            <td></td>
+                                            <td>Marry</td>
+                                            <td>Ronaldo</td>
+                                            <td>1500</td>
+                                            <td style="color: red;">Order canceled</td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#">#1</a></td>
+                                            <td>09-10-2022</td>
+                                            <td>10-10-2022</td>
+                                            <td>11-10-2022</td>
+                                            <td>Marry</td>
+                                            <td>David</td>
+                                            <td>200</td>
+                                            <td style="color: green;">Completed</td>
+                                        </tr>-->
                 </table>
             </div>
             <div id="paging">
