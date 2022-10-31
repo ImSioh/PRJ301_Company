@@ -22,13 +22,13 @@
 
                         </div>
                         <div class="profile-order-title-right">
-                            <c:if test="${(o.getRequiredDate()!=null && o.getShippedDate()==null)}">
+                            <c:if test="${o.getStatus() eq 'pending'}">
                                 <a href="order-manage?action=cancel&cancelId=${o.getOrderID()}" onclick="return warnCancel()" style="text-decoration: none">
                                     <span style="color: red;">Cancel</span>
                                 </a>
                                 <span style="color: blue;">Pending</span>
                             </c:if>
-                            <c:if test="${(o.getRequiredDate()!=null && o.getShippedDate()!=null)}">
+                            <c:if test="${o.getStatus() eq 'completed'}">
                                 <span style="color: green;">Completed</span>
                             </c:if>
                         </div>
@@ -44,7 +44,7 @@
 
                         <div class="profile-order-content">
                             <div class="profile-order-content-col1">
-                                <a href="detail.jsp"><img src="img/2.jpg" width="100%"/></a>
+                                <a href="detail?pid=${od.getProductID()}"><img src="img/2.jpg" width="100%"/></a>
                             </div>
                             <div class="profile-order-content-col2">${od.getProductName()}</div>
                             <div class="profile-order-content-col3">Quantity: ${od.getQuantity()}</div>
