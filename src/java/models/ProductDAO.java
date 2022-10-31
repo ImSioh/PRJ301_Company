@@ -38,7 +38,7 @@ public class ProductDAO extends DBContext {
     }
 
     public Product getProductById(int ProductID) {
-        
+
         try {
             String sql = "select * from Products where ProductID = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -66,12 +66,12 @@ public class ProductDAO extends DBContext {
     }
 
     public ArrayList<Product> getProductByKeyword(String keyword) {
-                ArrayList<Product> pro = new ArrayList<>();
+        ArrayList<Product> pro = new ArrayList<>();
         try {
             String sql = "select * from Products\n"
                     + "where ProductName like ?";
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, "%"+keyword+"%");
+            ps.setString(1, "%" + keyword + "%");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -181,7 +181,7 @@ public class ProductDAO extends DBContext {
         try {
             String sql1 = "delete from \"Order Details\" where ProductID=?";
             String sql2 = "delete from Products where ProductID = ?";
-            
+
             PreparedStatement ps1 = connection.prepareStatement(sql1);
             PreparedStatement ps2 = connection.prepareStatement(sql2);
 
@@ -317,64 +317,47 @@ public class ProductDAO extends DBContext {
         return proList;
     }
 
+    public ArrayList<Product> getProductsByPage(int page, int elements) {
+        ArrayList<Product> product = new ArrayList<>();
+        int start = page * elements - elements;
+        try {
+            String sql = "select * from Products\n"
+                    + "order by ProductID\n"
+                    + "offset ? rows\n"
+                    + "fetch next ? rows only";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, start);
+            ps.setInt(2, elements);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int ProductID = rs.getInt("ProductID");
+                String ProductName = rs.getString("ProductName");
+                int CategoryID = rs.getInt("CategoryID");
+                String QuantityPerUnit = rs.getString("QuantityPerUnit");
+                double UnitPrice = rs.getDouble("UnitPrice");
+                int UnitsInStock = rs.getInt("UnitsInStock");
+                int UnitsOnOrder = rs.getInt("UnitsOnOrder");
+                int ReorderLevel = rs.getInt("ReorderLevel");
+                boolean Discontinued = rs.getBoolean("Discontinued");
+
+                Product p = new Product(ProductID, ProductName, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued);
+
+                product.add(p);
+            }
+        } catch (Exception e) {
+        }
+        return product;
+    }
+
     public static void main(String[] args) {
         int count = 0;
-//        ArrayList<Product> list = new ProductDAO().getProduct();
-//        for (Product product : list) {
-//            System.out.println(product);
-//        }
-//        ProductDAO pd = new ProductDAO();
-////        
-//        System.out.println("==================");
-//        Product p1 = pd.getProductById(98);
-//        System.out.println(p1);
-//
-//        System.out.println("==========");
-//
-//        p1.setQuantityPerUnit("Chang");
-//        pd.editProductWithoutCategoryID(p1);
-//
-//        System.out.println(p1);
-//        
-//        System.out.println("==================================");
-//        System.out.println("p86 = " + list.get(79));
-//
-//        pd.DeleteProductById(86);
-//        System.out.println("p86 = " + list.get(79));
-
-//        System.out.println("55 = " + pd.getProductById(55));
-//        System.out.println("================================================");
-//        ArrayList<Product> pB = new ProductDAO().getProductBestSale();
-//        for (Product p : pB) {
-//            System.out.println("NAME = " + p.getProductName() + " & PRICE = " + p.getUnitPrice());
-//        }
-//
-//        System.out.println("================================================");
-//        ArrayList<Product> pH = new ProductDAO().getProductHot();
-//        for (Product p : pH) {
-//            System.out.println("NAME = " + p.getProductName() + " & PRICE = " + p.getUnitPrice());
-//        }
-//
-//        System.out.println("================================================");
-//        ArrayList<Product> pN = new ProductDAO().getProductNew();
-//        for (Product p : pN) {
-//            System.out.println("ID = " + p.getProductID() + " & NAME = " + p.getProductName() + " & PRICE = " + p.getUnitPrice());
-//            count++;
-//            if (count == 4) {
-//                break;
-//            }
-//        }
-//        Product p = new Product(100, "ProductName", 8, "QuantityPerUnit", 12345, 123, 12, 1, true);
-//        int check = new ProductDAO().createProduct(p);
-//        System.out.println("check = " + check);
-
-//        ArrayList<Product> list = new ProductDAO().getProduct();
-//        for (Product product : list) {
-//            System.out.println(product);
-//        }
-        
         ArrayList<Product> list = new ProductDAO().getProductByKeyword("ch");
         for (Product product : list) {
+            System.out.println(product);
+        }
+        System.out.println("================================");
+        ArrayList<Product> list2 = new ProductDAO().getProductsByPage(1, 10);
+        for (Product product : list2) {
             System.out.println(product);
         }
     }

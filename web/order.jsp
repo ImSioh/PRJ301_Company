@@ -85,14 +85,20 @@
             </div>
             <div id="paging">
                 <div class="pagination">
-                    <a href="#">&laquo;</a>
-                    <a href="#">1</a>
-                    <a href="#" class="active">2</a>
-                    <a href="#">3</a>
-                    <a href="#">4</a>
-                    <a href="#">5</a>
-                    <a href="#">6</a>
-                    <a href="#">&raquo;</a>
+                    <c:if test="${numberOfPage > 1}">
+                        <a href="order-list?page=${page-1}">&laquo;</a>
+                        <c:forEach var = "i" begin = "1" end = "${numberOfPage}">
+                            <c:choose>
+                                <c:when test="${i==page}">
+                                    <a href="order-list?page=${i}" class="active">${i}</a>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="order-list?page=${i}">${i}</a>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                        <a href="order-list?page=${page+1}">&raquo;</a>
+                    </c:if>
                 </div>
             </div>
         </div>

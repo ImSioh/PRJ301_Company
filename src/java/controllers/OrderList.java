@@ -60,35 +60,49 @@ public class OrderList extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        if (request.getParameter("action") == null){
-            String keyword = request.getParameter("txtSearch");
-            ArrayList<Orders> odList = new ArrayList<>();
-            if (keyword==null||keyword.trim().equals("")){
-                 odList = new OrderDAO().getAllOrder();
+        try {
+            int page = 0;
+            int elements = 10;
+            int numberOfPage;
+            try {
+                page = Integer.parseInt(request.getParameter("page"));
+            } catch (Exception e) {
+                page = 1;
             }
-            else{
-                odList = new OrderDAO().getAllOrderKeyword(keyword);
-            }
-            
-        ArrayList<Employee> empList = new EmployeeDAO().getAllEmployee();
-        ArrayList<Customer> cusList = new CustomerDAO().getCustomer();
+            request.setAttribute("page", page);
 
-        request.setAttribute("order", odList);
-        request.setAttribute("employee", empList);
-        request.setAttribute("customer", cusList);
-        
-        request.getRequestDispatcher("order.jsp").forward(request, response);
-        
-        
-        } else if (request.getParameter("action").equals("cancel")){
-            int orderID = Integer.parseInt(request.getParameter("id"));
-            int rs = new OrderDAO().cancelOrder(orderID);
-            
-            response.sendRedirect("order-list");
-            
+            OrderDAO oDAO = new OrderDAO();
+
+            if (request.getParameter("action") == null) {
+                String keyword = request.getParameter("txtSearch");
+                ArrayList<Orders> odList = new ArrayList<>();
+                if (keyword == null || keyword.trim().equals("")) {
+                    odList = new OrderDAO().getOrdersByPage(page, elements);
+                } else {
+                    odList = new OrderDAO().getAllOrderKeyword(keyword);
+                }
+
+                numberOfPage = oDAO.getAllOrder().size() % elements == 0 ? oDAO.getAllOrder().size() / elements : oDAO.getAllOrder().size() / elements + 1;
+                request.setAttribute("numberOfPage", numberOfPage);
+
+                ArrayList<Employee> empList = new EmployeeDAO().getAllEmployee();
+                ArrayList<Customer> cusList = new CustomerDAO().getCustomer();
+
+                request.setAttribute("order", odList);
+                request.setAttribute("employee", empList);
+                request.setAttribute("customer", cusList);
+
+                request.getRequestDispatcher("order.jsp").forward(request, response);
+
+            } else if (request.getParameter("action").equals("cancel")) {
+                int orderID = Integer.parseInt(request.getParameter("id"));
+                int rs = new OrderDAO().cancelOrder(orderID);
+                response.sendRedirect("order-list");
+            }
+        } catch (Exception e) {
+
         }
-        
+
     }
 
     /**

@@ -50,14 +50,14 @@ public class OrderDAO extends DBContext {
         }
         return order;
     }
-    
-        public ArrayList<Orders> getAllOrderKeyword(String keyword) {
+
+    public ArrayList<Orders> getAllOrderKeyword(String keyword) {
         ArrayList<Orders> order = new ArrayList<>();
         try {
-            String sql = "select * from Orders\n" +
-                        "where OrderID like ?";
+            String sql = "select * from Orders\n"
+                    + "where OrderID like ?";
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, "%"+keyword+"%");
+            ps.setString(1, "%" + keyword + "%");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -152,8 +152,8 @@ public class OrderDAO extends DBContext {
 
         return rs;
     }
-    
-        public int cancelOrder(int OrderId) {
+
+    public int cancelOrder(int OrderId) {
 
         int rs = -1;
         try {
@@ -173,6 +173,42 @@ public class OrderDAO extends DBContext {
         return rs;
     }
 
+    public ArrayList<Orders> getOrdersByPage(int page, int elements) {
+        ArrayList<Orders> order = new ArrayList<>();
+        int start = page * elements - elements;
+        try {
+            String sql = "select * from Orders\n"
+                    + "order by OrderID\n"
+                    + "offset ? rows\n"
+                    + "fetch next ? rows only";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, start);
+            ps.setInt(2, elements);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int OrderID = rs.getInt("OrderID");
+                String CustomerID = rs.getString("CustomerID");
+                int EmployeeID = rs.getInt("EmployeeID");
+                Date OrderDate = rs.getDate("OrderDate");
+                Date RequiredDate = rs.getDate("RequiredDate");
+                Date ShippedDate = rs.getDate("ShippedDate");
+                double Freight = rs.getDouble("Freight");
+                String ShipName = rs.getString("ShipName");
+                String ShipAddress = rs.getString("ShipAddress");
+                String ShipCity = rs.getString("ShipCity");
+                String ShipRegion = rs.getString("ShipRegion");
+                String ShipPostalCode = rs.getString("ShipPostalCode");
+                String ShipCountry = rs.getString("ShipCountry");
+
+                Orders o = new Orders(OrderID, CustomerID, EmployeeID, OrderDate, RequiredDate, ShippedDate, Freight, ShipName, ShipAddress, ShipCity, ShipRegion, ShipPostalCode, ShipCountry);
+
+                order.add(o);
+            }
+        } catch (Exception e) {
+        }
+        return order;
+    }
+
     public static void main(String[] args) {
         ArrayList<Orders> order = new OrderDAO().getAllOrderKeyword("12");
         for (Orders orders : order) {
@@ -186,5 +222,9 @@ public class OrderDAO extends DBContext {
 //        for (Orders o : orders) {
 //            System.out.println(o);
 //        }
+        ArrayList<Orders> order2 = new OrderDAO().getOrdersByPage(1, 10);
+        for (Orders orders : order2) {
+            System.out.println(orders);
+        }
     }
 }

@@ -28,7 +28,7 @@ public class ProductCreate extends HttpServlet {
         if (req.getSession().getAttribute("accSession") != null) {
             req.getRequestDispatcher("product-create.jsp").forward(req, resp);
         } else {
-            resp.sendRedirect("product-list");
+            resp.sendRedirect("product-list.jsp");
         }
     }
 

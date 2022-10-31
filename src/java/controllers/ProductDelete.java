@@ -20,10 +20,12 @@ public class ProductDelete extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int ProductID = Integer.parseInt(request.getParameter("id"));
-        ProductDAO pd = new ProductDAO();
-        pd.deleteProductById(ProductID);
+        if (request.getSession().getAttribute("accSession") != null) {
+            int ProductID = Integer.parseInt(request.getParameter("id"));
+            ProductDAO pd = new ProductDAO();
+            pd.deleteProductById(ProductID);
 
-        response.sendRedirect("product-list");
+            response.sendRedirect("product-list.jsp");
+        }
     }
 }
