@@ -68,6 +68,5 @@
         </form>
     </div>
 </div>
-</div>
 
 <%@include file="template/footer2.jsp" %>

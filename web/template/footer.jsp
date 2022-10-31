@@ -1,8 +1,7 @@
+<div id="footer">
+    PRJ301 - FPTU<br>
+    <!--Java Web Application Development - FPT University<br>-->
 </div>
-        <div id="footer">
-            PRJ301 - FPTU<br>
-            <!--Java Web Application Development - FPT University<br>-->
-        </div>
-    </div>
+</div>
 </body>
 </html>

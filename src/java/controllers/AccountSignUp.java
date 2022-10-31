@@ -32,7 +32,7 @@ public class AccountSignUp extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (request.getSession().getAttribute("AccSession") == null) {
+        if (request.getSession().getAttribute("accSession") == null) {
             //Chuyen tiep yeu cau cua nguoi dung sang 'signup.jsp'
             request.getRequestDispatcher("../signup.jsp").forward(request, response);
         } else {

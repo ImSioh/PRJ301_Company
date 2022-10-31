@@ -25,7 +25,7 @@ public class OrderManage extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Account acc = (Account) req.getSession().getAttribute("AccSession");
+        Account acc = (Account) req.getSession().getAttribute("accSession");
         String cID = acc.getCustomerID();
         Customer cus = new CustomerDAO().getCustomerById(cID);
         req.setAttribute("customer", cus);

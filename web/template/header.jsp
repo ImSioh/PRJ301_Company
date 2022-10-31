@@ -29,13 +29,13 @@
                     <ul>
                         <li><a href="<%= path %>/cart">Cart: 0</a></li>
                             <%
-                                if(session.getAttribute("AccSession")==null){
+                                if(session.getAttribute("accSession")==null){
                             %>
                         <li><a href="<%= path %>/account/signin">SignIn</a></li>
                         <li><a href="<%= path %>/account/signup">SignUp</a></li>
                             <% 
                                 } else {
-                                    Account acc = (Account)request.getSession().getAttribute("AccSession");
+                                    Account acc = (Account)request.getSession().getAttribute("accSession");
                             %>
                         <li><a href="<%= path %>/account/profile">Profile (<%= acc.getEmail() %>)</a></li>
                         <li><a href="<%= path %>/account/signin">SignOut</a></li>

@@ -19,11 +19,11 @@
     </head>
     <body>
         <%
-            if(request.getSession().getAttribute("AccSession")==null) {
+            if(request.getSession().getAttribute("accSession")==null) {
         %>
         <c:redirect url="error.jsp"></c:redirect>
         <%  } else { 
-                Account acc = (Account)request.getSession().getAttribute("AccSession");
+                Account acc = (Account)request.getSession().getAttribute("accSession");
                 if(acc.getRole()==2){
         %>
         <c:redirect url="error.jsp"></c:redirect>
@@ -35,7 +35,7 @@
                 </div>
                 <div id="banner-admin">
                     <ul>
-                        <c:set value="${sessionScope.AccSession}" var="acc"/>
+                        <c:set value="${sessionScope.accSession}" var="acc"/>
                         <c:if test="${acc!=null}">
                             <li>Profile (<a href="<%= path %>/account/profile">${acc.email}</a>)</li>
                             </c:if>

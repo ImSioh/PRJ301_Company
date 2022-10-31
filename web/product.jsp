@@ -14,12 +14,12 @@
                 <div id="product-title-1" style="width: 25%;">
                     <b>Filter by Catetory:</b>
                     <form>
-                        <!--                        <select name="ddlCategory">
-                                                    <option value="catid1">Smart Phone</option>
-                                                    <option value="catid2">Computer</option>
-                                                    <option value="catid3">Television</option>
-                                                    <option value="catid4">Electronic</option>
-                                                </select>-->
+<!--                        <select name="ddlCategory">
+                            <option value="catid1">Smart Phone</option>
+                            <option value="catid2">Computer</option>
+                            <option value="catid3">Television</option>
+                            <option value="catid4">Electronic</option>
+                        </select>-->
                         <select name="ddlCategory">
                             <c:forEach items="${category}" var="c">
                                 <c:if test="${c.getCategoryID()==p.getCategoryID()}">
@@ -90,7 +90,6 @@
                                     <a href="#">6</a>
                                     <a href="#">&raquo;</a>
                                 </div>
-                            </div>
                             </div>
                             </div>
                             </div>

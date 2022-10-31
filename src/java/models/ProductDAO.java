@@ -179,8 +179,9 @@ public class ProductDAO extends DBContext {
 
     public void deleteProductById(int ProductID) {
         try {
-            String sql1 = "delete from Products where ProductID = ?";
-            String sql2 = "delete from \"Order Details\" where ProductID=?";
+            String sql1 = "delete from \"Order Details\" where ProductID=?";
+            String sql2 = "delete from Products where ProductID = ?";
+            
             PreparedStatement ps1 = connection.prepareStatement(sql1);
             PreparedStatement ps2 = connection.prepareStatement(sql2);
 

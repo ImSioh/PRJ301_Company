@@ -30,7 +30,7 @@ public class ProductList extends HttpServlet {
         request.setAttribute("product", pList);
         request.setAttribute("category", c);
         
-        if (request.getSession().getAttribute("AccSession") != null) {
+        if (request.getSession().getAttribute("accSession") != null) {
             request.getRequestDispatcher("product.jsp").forward(request, response);
         } else {
             response.sendRedirect("product-list");

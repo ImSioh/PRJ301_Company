@@ -33,11 +33,9 @@
                     <div class="profile-order-content-col3">Quantity: 2</div>
                     <div class="profile-order-content-col4">2000 $</div>
                 </div>
-
             </div>
         </div>
     </div>
-</div>
 </div>
 
 <%@include file="template/footer2.jsp" %>

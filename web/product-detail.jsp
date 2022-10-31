@@ -38,7 +38,7 @@
 
                                 <div id="product-detail-buttons">
                                     <div id="product-detail-button">
-                                    <c:if test="${sessionScope.AccSession==null || sessionScope.accSession.role==2}">
+                                    <c:if test="${sessionScope.accSession==null || sessionScope.accSession.role==2}">
                                         <input type="button" value="BUY NOW">
                                         <input type="button" value="ADD TO CART" style="background-color: #fff; color:red;border: 1px solid gray;">
                                     </c:if>
@@ -61,4 +61,5 @@
         </div>
     </div>
 </div>
+                    
 <%@include file="template/footer.jsp" %>

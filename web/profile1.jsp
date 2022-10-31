@@ -57,26 +57,27 @@
         </div>
     </div>
 </div>
+</div>
 
 <%@include file="template/footer.jsp" %>
 
 <script type="text/javascript" src="lib/jquery/dist/jquery.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $(".order-detail").hide();
-        $(".order-id").click(function () {
-            // $(".order-detail").show();
-            // $(".order-detail").fadeIn(1000);
-            $(".order-detail").toggle(1000);
-        });
-    });
+                                    $(document).ready(function () {
+                                        $(".order-detail").hide();
+                                        $(".order-id").click(function () {
+                                            // $(".order-detail").show();
+                                            // $(".order-detail").fadeIn(1000);
+                                            $(".order-detail").toggle(1000);
+                                        });
+                                    });
 
-    function warnCancel() {
-        if (confirm("Cancel order will not be reverted! Do you want to continue?")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+                                    function warnCancel() {
+                                        if (confirm("Cancel order will not be reverted! Do you want to continue?")) {
+                                            return true;
+                                        } else {
+                                            return false;
+                                        }
+                                    }
 </script>
 

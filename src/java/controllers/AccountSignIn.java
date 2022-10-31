@@ -17,8 +17,8 @@ public class AccountSignIn extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (request.getSession().getAttribute("AccSession") != null) {
-            request.getSession().removeAttribute("AccSession");
+        if (request.getSession().getAttribute("accSession") != null) {
+            request.getSession().removeAttribute("accSession");
             response.sendRedirect("../home");
         } else {
             //Chuyen tiep yeu cau cua nguoi dung sang 'signin.jsp'
@@ -52,7 +52,7 @@ public class AccountSignIn extends HttpServlet {
             request.setAttribute("Account", acc);
             if (acc != null) {
                 //Cấp session
-                request.getSession().setAttribute("AccSession", acc);
+                request.getSession().setAttribute("accSession", acc);
                 //admin
                 if (acc.getRole() == 1) {
                     response.sendRedirect(request.getContextPath() + "/dashboard.jsp");

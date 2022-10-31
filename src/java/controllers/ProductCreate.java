@@ -25,7 +25,7 @@ public class ProductCreate extends HttpServlet {
         req.setAttribute("product", pList);
         req.setAttribute("category", c);
 
-        if (req.getSession().getAttribute("AccSession") != null) {
+        if (req.getSession().getAttribute("accSession") != null) {
             req.getRequestDispatcher("product-create.jsp").forward(req, resp);
         } else {
             resp.sendRedirect("product-list");
