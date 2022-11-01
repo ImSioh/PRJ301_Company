@@ -17,22 +17,44 @@
                         <span style="color: green;">Completed</span>
                     </div>
                 </div>
-                <div class="profile-order-content" style="background-color: white;">
-                    <div class="profile-order-content-col1">
-                        <a href="detail.jsp"><img src="img/2.jpg" width="100%"/></a>
+                <!--                <div class="profile-order-content" style="background-color: white;">
+                                    <div class="profile-order-content-col1">
+                                        <a href="detail.jsp"><img src="img/2.jpg" width="100%"/></a>
+                                    </div>
+                                    <div class="profile-order-content-col2">Product 12</div>
+                                    <div class="profile-order-content-col3">Quantity: 1</div>
+                                    <div class="profile-order-content-col4">1000 $</div>
+                                </div>
+                                <div class="profile-order-content" style="background-color: white;">
+                                    <div class="profile-order-content-col1">
+                                        <a href="detail.jsp"><img src="img/1.jpg" width="100%"/></a>
+                                    </div>
+                                    <div class="profile-order-content-col2">Product 1</div>
+                                    <div class="profile-order-content-col3">Quantity: 2</div>
+                                    <div class="profile-order-content-col4">2000 $</div>
+                                </div>-->
+
+
+
+                <%
+            int OrderID = Integer.parseInt(request.getParameter("id"));
+            ArrayList<OrderDetail> ods = new OrderDetailDAO().getOrderDetailsByOrderID(OrderID);
+            request.setAttribute("ods", ods);
+                %>
+
+
+                <c:forEach items="${ods}" var="od">
+
+                    <div class="profile-order-content">
+                        <div class="profile-order-content-col1">
+                            <a href="detail.jsp"><img src="img/2.jpg" width="100%"/></a>
+                        </div>
+                        <div class="profile-order-content-col2">${od.getProductName()}</div>
+                        <div class="profile-order-content-col3">Quantity: ${od.getQuantity()}</div>
+                        <div class="profile-order-content-col4">${od.getAmmount()} $</div>
                     </div>
-                    <div class="profile-order-content-col2">Product 12</div>
-                    <div class="profile-order-content-col3">Quantity: 1</div>
-                    <div class="profile-order-content-col4">1000 $</div>
-                </div>
-                <div class="profile-order-content" style="background-color: white;">
-                    <div class="profile-order-content-col1">
-                        <a href="detail.jsp"><img src="img/1.jpg" width="100%"/></a>
-                    </div>
-                    <div class="profile-order-content-col2">Product 1</div>
-                    <div class="profile-order-content-col3">Quantity: 2</div>
-                    <div class="profile-order-content-col4">2000 $</div>
-                </div>
+                </c:forEach>
+
             </div>
         </div>
     </div>

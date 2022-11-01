@@ -50,7 +50,11 @@
                     </tr>
                     <c:forEach items="${order}" var="o">
                         <tr>
-                            <td><a href="order-detail?id=${o.orderID}">#${o.orderID}</a></td>
+                            <td><a href="order-detail.jsp?id=${o.orderID}">#${o.orderID}</a>
+                                <form>
+                                    <input type="submit" value="${o.orderID}">
+                                </form>
+                            </td>
                             <td>${o.orderDate}</td>
                             <td>${o.requiredDate}</td>
                             <td>${o.shippedDate}</td>
@@ -77,6 +81,7 @@
                                 </c:otherwise>
                             </c:choose>
                         </tr>
+
                     </c:forEach>
 
                     <!--                    <tr>

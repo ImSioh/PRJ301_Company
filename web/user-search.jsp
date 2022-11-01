@@ -19,7 +19,7 @@
 
 .card-layout__item {
     /* There will be 3 cards per row */
-    flex-basis: 23%;
+    flex-basis: 22%;
 
     padding-left: 0.25rem;
     padding-right: 0.25rem;
