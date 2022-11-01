@@ -19,7 +19,7 @@ import models.*;
  *
  * @author Asus
  */
-@WebServlet(name = "OrderList", urlPatterns = {"/order-list"})
+//@WebServlet(name = "OrderList", urlPatterns = {"/order-list"})
 public class OrderList extends HttpServlet {
 
     /**
@@ -60,7 +60,17 @@ public class OrderList extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ArrayList<Orders> odList = new OrderDAO().getAllOrder();
+        
+        if (request.getParameter("action") == null){
+            String keyword = request.getParameter("txtSearch");
+            ArrayList<Orders> odList = new ArrayList<>();
+            if (keyword==null||keyword.trim().equals("")){
+                 odList = new OrderDAO().getAllOrder();
+            }
+            else{
+                odList = new OrderDAO().getAllOrderKeyword(keyword);
+            }
+            
         ArrayList<Employee> empList = new EmployeeDAO().getAllEmployee();
         ArrayList<Customer> cusList = new CustomerDAO().getCustomer();
 
@@ -69,6 +79,16 @@ public class OrderList extends HttpServlet {
         request.setAttribute("customer", cusList);
         
         request.getRequestDispatcher("order.jsp").forward(request, response);
+        
+        
+        } else if (request.getParameter("action").equals("cancel")){
+            int orderID = Integer.parseInt(request.getParameter("id"));
+            int rs = new OrderDAO().cancelOrder(orderID);
+            
+            response.sendRedirect("order-list");
+            
+        }
+        
     }
 
     /**

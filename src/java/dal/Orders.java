@@ -160,16 +160,18 @@ public class Orders {
 
     public String getStatus() {
         String status = "";
-        if (this.getRequiredDate() != null && this.getShippedDate() == null) {
+        if (this.getRequiredDate()!=null && this.getShippedDate()==null){
             status = "pending";
-        } else if (this.getRequiredDate() != null && this.getShippedDate() != null) {
+        }
+        else if (this.getRequiredDate()!=null && this.getShippedDate()!=null){
             status = "completed";
-        } else {
+        }
+        else{
             status = "cancel";
         }
         return status;
-    }
-
+    }    
+    
     @Override
     public String toString() {
         return "Orders{" + "OrderID=" + orderID + ", CustomerID=" + customerID + ", EmployeeID=" + employeeID + ", OrderDate=" + orderDate + ", RequiredDate=" + requiredDate + ", ShippedDate=" + shippedDate + ", Freight=" + freight + ", ShipName=" + shipName + ", ShipAddress=" + shipAddress + ", ShipCity=" + shipCity + ", ShipRegion=" + shipRegion + ", ShipPostalCode=" + shipPostalCode + ", ShipCountry=" + shipCountry + '}';

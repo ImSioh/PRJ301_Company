@@ -12,13 +12,21 @@ import models.CategoryDAO;
 import models.ProductDAO;
 
 public class ProductList extends HttpServlet {
-
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ArrayList<Product> pList = new ProductDAO().getProduct();
+        ArrayList<Product> pList = new ArrayList<>();
+        String keyword = request.getParameter("txtSearch");
+        if (keyword == null || keyword.trim().equals("")) {
+            pList = new ProductDAO().getProduct();
+            
+        } else {
+            pList = new ProductDAO().getProductByKeyword(keyword);
+            
+        }
         ArrayList<Category> c = new CategoryDAO().getCategory();
-
+        
         request.setAttribute("product", pList);
         request.setAttribute("category", c);
         
@@ -28,10 +36,10 @@ public class ProductList extends HttpServlet {
             response.sendRedirect("product-list");
         }
     }
-
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
     }
 }

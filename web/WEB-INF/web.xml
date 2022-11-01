@@ -52,6 +52,14 @@
         <servlet-name>OrderManage</servlet-name>
         <servlet-class>controllers.OrderManage</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Search</servlet-name>
+        <servlet-class>controllers.Search</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>OrderList</servlet-name>
+        <servlet-class>controllers.OrderList</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AccountSignIn</servlet-name>
         <url-pattern>/account/signin</url-pattern>
@@ -103,5 +111,13 @@
     <servlet-mapping>
         <servlet-name>OrderManage</servlet-name>
         <url-pattern>/order-manage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Search</servlet-name>
+        <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OrderList</servlet-name>
+        <url-pattern>/order-list</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -6,6 +6,17 @@
 
 <%@include file="template/header2.jsp" %>
 
+<script>
+
+    function warnCancel() {
+        if (confirm("Cancel order will not be reverted! Do you want to continue?")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>
+
 <div id="content-right">
     <div class="path-admin">ORDERS LIST</b></div>
     <div class="content-main">
@@ -17,7 +28,14 @@
                     To: <input type="date" name="txtEndOrderDate"/>
                     <input type="submit" value="Filter">
                 </form>
+
+                <form>
+                    <input type="text" name="txtSearch" placeholder="Enter order id to search"/>
+                    <input type="submit" value="Search"/>
+                </form>
+
             </div>
+
             <div id="order-table">
                 <table id="orders">
                     <tr>
@@ -48,14 +66,11 @@
                             </c:forEach>
                             <td>${o.freight}</td>
                             <c:choose>
-                                <c:when test="${o.shippedDate!=null}">
-                                    <td style="color: green; font-weight: bold">Completed</td>
+                                <c:when test="${o.getStatus() eq 'completed'}">
+                                    <td style="color: green;">Completed</td>
                                 </c:when>
-                                <c:when test="${o.shippedDate==null}">
-                                    <td style="color: blue; font-weight: bold">Pending | <a href="#" style="color: red; font-weight: bold; text-decoration: none;">Cancel</a></td>
-                                </c:when>
-                                <c:when test="${o.shippedDate > o.requiredDate}">
-                                    <td style="color: red; font-weight: bold">Out of date</td>
+                                <c:when test="${o.getStatus() eq 'pending'}">
+                                    <td style="color: blue;">Pending | <a href="order-list?action=cancel&id=${o.getOrderID()}" onclick="return warnCancel()">Cancel</a></td>
                                 </c:when>
                                 <c:otherwise>
                                     <td style="color: red; font-weight: bold">Order canceled</td>
