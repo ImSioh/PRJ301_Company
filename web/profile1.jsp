@@ -44,7 +44,7 @@
 
                         <div class="profile-order-content">
                             <div class="profile-order-content-col1">
-                                <a href="detail.jsp"><img src="img/2.jpg" width="100%"/></a>
+                                <a href="detail?pid=${od.getProductID()}"><img src="img/2.jpg" width="100%"/></a>
                             </div>
                             <div class="profile-order-content-col2">${od.getProductName()}</div>
                             <div class="profile-order-content-col3">Quantity: ${od.getQuantity()}</div>
