@@ -8,38 +8,45 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import models.CategoryDAO;
 import models.ProductDAO;
 
 public class ProductList extends HttpServlet {
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ArrayList<Product> pList = new ArrayList<>();
         String keyword = request.getParameter("txtSearch");
-        if (keyword == null || keyword.trim().equals("")) {
+
+        if (keyword == null) {
             pList = new ProductDAO().getProduct();
-            
+
         } else {
-            pList = new ProductDAO().getProductByKeyword(keyword);
-            
+            keyword = keyword.trim();
+
+            HashMap<String, String> filters = new HashMap<>();
+            filters.put("CategoryID", request.getParameter("ddlCategory"));
+
+            pList = new ProductDAO().getProductByKeyword(keyword, filters);
         }
+
         ArrayList<Category> c = new CategoryDAO().getCategory();
-        
+
         request.setAttribute("product", pList);
         request.setAttribute("category", c);
-        
+
         if (request.getSession().getAttribute("accSession") != null) {
             request.getRequestDispatcher("product-list.jsp").forward(request, response);
         } else {
             response.sendRedirect("product-list");
         }
     }
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
     }
 }

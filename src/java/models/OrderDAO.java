@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,14 +51,80 @@ public class OrderDAO extends DBContext {
         }
         return order;
     }
-    
-        public ArrayList<Orders> getAllOrderKeyword(String keyword) {
-        ArrayList<Orders> order = new ArrayList<>();
+
+    public Orders getOrderById(String OrderId) {
+        Orders o = null;
         try {
-            String sql = "select * from Orders\n" +
-                        "where OrderID like ?";
+            String sql = "select * from Orders\n"
+                    + "where OrderID = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, "%"+keyword+"%");
+            ps.setString(1, OrderId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int OrderID = rs.getInt("OrderID");
+                String CustomerID = rs.getString("CustomerID");
+                int EmployeeID = rs.getInt("EmployeeID");
+                Date OrderDate = rs.getDate("OrderDate");
+                Date RequiredDate = rs.getDate("RequiredDate");
+                Date ShippedDate = rs.getDate("ShippedDate");
+                double Freight = rs.getDouble("Freight");
+                String ShipName = rs.getString("ShipName");
+                String ShipAddress = rs.getString("ShipAddress");
+                String ShipCity = rs.getString("ShipCity");
+                String ShipRegion = rs.getString("ShipRegion");
+                String ShipPostalCode = rs.getString("ShipPostalCode");
+                String ShipCountry = rs.getString("ShipCountry");
+
+                o = new Orders(OrderID, CustomerID, EmployeeID, OrderDate, RequiredDate, ShippedDate, Freight, ShipName, ShipAddress, ShipCity, ShipRegion, ShipPostalCode, ShipCountry);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return o;
+    }
+
+    public ArrayList<Orders> getAllOrderKeyword(String keyword, HashMap<String, String> filter) {
+        ArrayList<Orders> order = new ArrayList<>();
+        int sql_param_counter = 1;
+        try {
+            String sql = "select * from Orders\n"
+                    + "where OrderID like ?";
+
+            String StartOrderDate = filter.get("StartOrderDate");
+            String EndOrderDate = filter.get("EndOrderDate");
+
+            if (StartOrderDate != null) {
+                if (!"".equals(StartOrderDate.trim())) {
+                    sql += " and ? <= OrderDate";
+                }
+            }
+
+            if (EndOrderDate != null) {
+                if (!"".equals(EndOrderDate.trim())) {
+                    sql += " and OrderDate <= ?";
+                }
+            }
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(sql_param_counter, "%" + keyword + "%");
+
+            sql_param_counter += 1;
+
+            if (StartOrderDate != null) {
+                if (!"".equals(StartOrderDate.trim())) {
+                    ps.setString(sql_param_counter, StartOrderDate);
+                    sql_param_counter += 1;
+                }
+            }
+
+            if (EndOrderDate != null) {
+                if (!"".equals(EndOrderDate.trim())) {
+                    ps.setString(sql_param_counter, EndOrderDate);
+                    sql_param_counter += 1;
+                }
+            }
+
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -152,8 +219,8 @@ public class OrderDAO extends DBContext {
 
         return rs;
     }
-    
-        public int cancelOrder(int OrderId) {
+
+    public int cancelOrder(int OrderId) {
 
         int rs = -1;
         try {
@@ -174,10 +241,16 @@ public class OrderDAO extends DBContext {
     }
 
     public static void main(String[] args) {
-        ArrayList<Orders> order = new OrderDAO().getAllOrderKeyword("12");
+        HashMap<String, String> filters = new HashMap<>();
+//        filters.put("StartOrderDate", "1997-01-01");
+        filters.put("EndOrderDate", "1998-01-01");
+
+        ArrayList<Orders> order = new OrderDAO().getAllOrderKeyword("12", filters);
         for (Orders orders : order) {
             System.out.println(orders);
         }
+//        Orders o = new OrderDAO().getOrderById("10303");
+//        System.out.println(o);
 
         System.out.println("==============================================================");
 //        int rs = new OrderDAO().cancelOrder(11072, "ERNSH");

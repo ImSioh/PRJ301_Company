@@ -55,7 +55,7 @@ public class AccountSignIn extends HttpServlet {
                 request.getSession().setAttribute("accSession", acc);
                 //admin
                 if (acc.getRole() == 1) {
-                    response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
+                    response.sendRedirect(request.getContextPath() + "/dashboard");
                 } //user
                 else if (acc.getRole() == 2) {
                     response.sendRedirect(request.getContextPath() + "/home");

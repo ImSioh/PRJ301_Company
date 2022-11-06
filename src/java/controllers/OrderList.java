@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import models.*;
 
 /**
@@ -60,35 +61,42 @@ public class OrderList extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        if (request.getParameter("action") == null){
+
+        if (request.getParameter("action") == null) {
             String keyword = request.getParameter("txtSearch");
             ArrayList<Orders> odList = new ArrayList<>();
-            if (keyword==null||keyword.trim().equals("")){
-                 odList = new OrderDAO().getAllOrder();
-            }
-            else{
-                odList = new OrderDAO().getAllOrderKeyword(keyword);
+
+            if (keyword == null) {
+                odList = new OrderDAO().getAllOrder();
+            } else {
+                keyword = keyword.trim();
+                
+                HashMap<String, String> filters = new HashMap<>();
+                filters.put("StartOrderDate", request.getParameter("txtStartOrderDate"));
+                filters.put("EndOrderDate", request.getParameter("txtEndOrderDate"));
+                
+                odList = new OrderDAO().getAllOrderKeyword(keyword, filters);
             }
             
-        ArrayList<Employee> empList = new EmployeeDAO().getAllEmployee();
-        ArrayList<Customer> cusList = new CustomerDAO().getCustomer();
 
-        request.setAttribute("order", odList);
-        request.setAttribute("employee", empList);
-        request.setAttribute("customer", cusList);
-        
-        request.getRequestDispatcher("order.jsp").forward(request, response);
-        
-        
-        } else if (request.getParameter("action").equals("cancel")){
+
+            ArrayList<Employee> empList = new EmployeeDAO().getAllEmployee();
+            ArrayList<Customer> cusList = new CustomerDAO().getCustomer();
+
+            request.setAttribute("order", odList);
+            request.setAttribute("employee", empList);
+            request.setAttribute("customer", cusList);
+
+            request.getRequestDispatcher("order.jsp").forward(request, response);
+
+        } else if (request.getParameter("action").equals("cancel")) {
             int orderID = Integer.parseInt(request.getParameter("id"));
             int rs = new OrderDAO().cancelOrder(orderID);
-            
+
             response.sendRedirect("order-list");
-            
+
         }
-        
+
     }
 
     /**

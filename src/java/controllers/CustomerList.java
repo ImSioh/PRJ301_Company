@@ -4,23 +4,20 @@
  */
 package controllers;
 
-import dal.Category;
-import dal.Product;
+import dal.Customer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import models.CategoryDAO;
-import models.ProductDAO;
+import models.CustomerDAO;
 
 /**
  *
  * @author phamt
  */
-public class Search extends HttpServlet{
+public class CustomerList extends HttpServlet{
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -30,20 +27,10 @@ public class Search extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        super.doGet(req, resp); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        String keyword = req.getParameter("keyword").trim();
-        
-        HashMap<String, String> filters = new HashMap<>();
-        filters.put("CategoryID", req.getParameter("ddlCategory"));
+        ArrayList<Customer> cusList = new CustomerDAO().getCustomer();
 
-        ArrayList<Product> ps = new ProductDAO().getProductByKeyword(keyword, filters);
-        ArrayList<Category> c = new CategoryDAO().getCategory();
-
-        req.setAttribute("category", c);
-        req.setAttribute("product_list", ps);
-        
-        req.getRequestDispatcher("user-search.jsp").forward(req, resp);
-//        resp.getWriter().print(keyword);
-
+        req.setAttribute("customer", cusList);
+        req.getRequestDispatcher("customer.jsp").forward(req, resp);
     }
     
 }

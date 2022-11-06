@@ -35,7 +35,7 @@
                     </div>
 
                     <%
-                        int OrderID = ((Orders)pageContext.findAttribute("o")).getOrderID();
+                    int OrderID = ((Orders)pageContext.findAttribute("o")).getOrderID();
                     ArrayList<OrderDetail> ods = new OrderDetailDAO().getOrderDetailsByOrderID(OrderID);
                     request.setAttribute("ods", ods);
                     %>

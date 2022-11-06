@@ -9,32 +9,28 @@
         <div id="content-main-dashboard">
             <div>
                 <div class="profile-order-title">
+
+                    <%
+                    Orders o = new OrderDAO().getOrderById(request.getParameter("id"));
+                    request.setAttribute("o", o);
+                    %>
+
                     <div class="profile-order-title-left">
-                        <div>OrderID: #5</div>
-                        <div>Order creation date: 12-10-2022</div>
+                        <div>OrderID: ${param.id}</div>
+                        <div>Order creation date: ${o.getOrderDate()}</div>
                     </div>
                     <div class="profile-order-title-right">
-                        <span style="color: green;">Completed</span>
+                        <c:if test="${o.getStatus() eq 'pending'}">
+                            <a href="order-manage?action=cancel&cancelId=${o.getOrderID()}" onclick="return warnCancel()" style="text-decoration: none">
+                                <span style="color: red;">Cancel</span>
+                            </a>
+                            <span style="color: blue;">Pending</span>
+                        </c:if>
+                        <c:if test="${o.getStatus() eq 'completed'}">
+                            <span style="color: green;">Completed</span>
+                        </c:if>
                     </div>
                 </div>
-                <!--                <div class="profile-order-content" style="background-color: white;">
-                                    <div class="profile-order-content-col1">
-                                        <a href="detail.jsp"><img src="img/2.jpg" width="100%"/></a>
-                                    </div>
-                                    <div class="profile-order-content-col2">Product 12</div>
-                                    <div class="profile-order-content-col3">Quantity: 1</div>
-                                    <div class="profile-order-content-col4">1000 $</div>
-                                </div>
-                                <div class="profile-order-content" style="background-color: white;">
-                                    <div class="profile-order-content-col1">
-                                        <a href="detail.jsp"><img src="img/1.jpg" width="100%"/></a>
-                                    </div>
-                                    <div class="profile-order-content-col2">Product 1</div>
-                                    <div class="profile-order-content-col3">Quantity: 2</div>
-                                    <div class="profile-order-content-col4">2000 $</div>
-                                </div>-->
-
-
 
                 <%
             int OrderID = Integer.parseInt(request.getParameter("id"));

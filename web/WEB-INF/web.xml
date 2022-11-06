@@ -60,6 +60,14 @@
         <servlet-name>OrderList</servlet-name>
         <servlet-class>controllers.OrderList</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Dashboard</servlet-name>
+        <servlet-class>controllers.Dashboard</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CustomerList</servlet-name>
+        <servlet-class>controllers.CustomerList</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AccountSignIn</servlet-name>
         <url-pattern>/account/signin</url-pattern>
@@ -119,5 +127,13 @@
     <servlet-mapping>
         <servlet-name>OrderList</servlet-name>
         <url-pattern>/order-list</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dashboard</servlet-name>
+        <url-pattern>/dashboard</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CustomerList</servlet-name>
+        <url-pattern>/customer-list</url-pattern>
     </servlet-mapping>
 </web-app>

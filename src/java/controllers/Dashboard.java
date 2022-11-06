@@ -3,24 +3,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package controllers;
-
-import dal.Category;
-import dal.Product;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import models.CategoryDAO;
-import models.ProductDAO;
+import java.util.List;
+import models.DashboardDAO;
 
 /**
  *
  * @author phamt
  */
-public class Search extends HttpServlet{
+@SuppressWarnings("unchecked")
+public class Dashboard extends HttpServlet{
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -30,20 +27,18 @@ public class Search extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        super.doGet(req, resp); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        String keyword = req.getParameter("keyword").trim();
+        List sales_by_month = new DashboardDAO().getSalesByMonth();
+        ArrayList<Integer> sales = (ArrayList<Integer>) sales_by_month.get(0);
+        ArrayList<String> months = (ArrayList<String>) sales_by_month.get(1);
         
-        HashMap<String, String> filters = new HashMap<>();
-        filters.put("CategoryID", req.getParameter("ddlCategory"));
+//        resp.getWriter().print(sales);
+//        resp.getWriter().print(months);
 
-        ArrayList<Product> ps = new ProductDAO().getProductByKeyword(keyword, filters);
-        ArrayList<Category> c = new CategoryDAO().getCategory();
-
-        req.setAttribute("category", c);
-        req.setAttribute("product_list", ps);
+        req.setAttribute("sales", sales);
+        req.setAttribute("months", months);
         
-        req.getRequestDispatcher("user-search.jsp").forward(req, resp);
-//        resp.getWriter().print(keyword);
-
+        req.getRequestDispatcher("dashboard.jsp").forward(req, resp);
+        
     }
     
 }

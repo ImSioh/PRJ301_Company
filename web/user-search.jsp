@@ -7,36 +7,53 @@
 
 
 <style>
- .card-layout {
-    display: flex;
+    .card-layout {
+        display: flex;
 
-    /* Put a card in the next row when previous cards take all width */
-    flex-wrap: wrap;
+        /* Put a card in the next row when previous cards take all width */
+        flex-wrap: wrap;
 
-    margin-left: -0.25rem;
-    margin-right: -0.25rem;
-}
+        margin-left: -0.25rem;
+        margin-right: -0.25rem;
+    }
 
-.card-layout__item {
-    /* There will be 3 cards per row */
-    flex-basis: 22%;
+    .card-layout__item {
+        /* There will be 4 cards per row */
+        flex-basis: 22%;
 
-    padding-left: 0.25rem;
-    padding-right: 0.25rem;
-}     
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+    }
 </style>
 
 <div id="content">
-<!--    <div id="content-left">
-        <h3>CATEGORY</h3>
-        <c:forEach items="${category}" var="c">
-            <ul>
-                <a href="category?id=${c.getCategoryID()}"><li>${c.getCategoryName()}</li></a>
-            </ul>
-        </c:forEach>
-    </div>-->
+    <div id="content-left">
+        <h3>Filter The Result</h3>
+        <%--<c:forEach items="${category}" var="c">--%>
+        <!--            <ul>
+                        <a href="category?id=${c.getCategoryID()}"><li>${c.getCategoryName()}</li></a>
+                    </ul>-->
+        <%--</c:forEach>--%>
+        <form>
+            <input type="hidden" name="keyword" value="${param.keyword}">
+            <select name="ddlCategory">
+                <option disabled selected value> -- select an option -- </option>
+                <c:forEach items="${category}" var="c">
+                    <c:if test="${c.getCategoryID()==param.ddlCategory}">
+                        <option value="${c.getCategoryID()}" selected>${c.getCategoryName()}</option>
+                    </c:if>
+                    <c:if test="${c.getCategoryID()!=param.ddlCategory}">
+                        <option value="${c.getCategoryID()}" >${c.getCategoryName()}</option>
+                    </c:if>
 
-    <div>
+                </c:forEach>
+            </select>
+            <input type="submit" value="Filter">
+        </form>
+        <a href="search?keyword=${param.keyword}">Reset</a>
+    </div>
+
+    <div id="content-right">   
         <div class="path">Search result</b></div>
         <div class="content-main card-layout">
             <c:forEach items="${product_list}" var="p">

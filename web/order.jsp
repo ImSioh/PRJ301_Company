@@ -24,6 +24,7 @@
             <div id="order-title">
                 <b>Filter by Order date:</b>
                 <form>
+                    <input type="hidden" name="txtSearch" value="${param.txtSearch}">
                     From: <input type="date" name="txtStartOrderDate"/>
                     To: <input type="date" name="txtEndOrderDate"/>
                     <input type="submit" value="Filter">
@@ -33,6 +34,19 @@
                     <input type="text" name="txtSearch" placeholder="Enter order id to search"/>
                     <input type="submit" value="Search"/>
                 </form>
+                    
+                    <div>
+                        <c:if test="${not empty param.txtSearch}">   
+                            #Keyword: ${param.txtSearch}
+                        </c:if>
+                        <c:if test="${not empty param.txtStartOrderDate}">   
+                            #From: ${param.txtStartOrderDate}
+                        </c:if>                            
+                        <c:if test="${not empty param.txtEndOrderDate}">   
+                            #To: ${param.txtEndOrderDate}
+                        </c:if>
+
+                    </div>
 
             </div>
 
@@ -50,10 +64,9 @@
                     </tr>
                     <c:forEach items="${order}" var="o">
                         <tr>
-                            <td><a href="order-detail.jsp?id=${o.orderID}">#${o.orderID}</a>
-                                <form>
-                                    <input type="submit" value="${o.orderID}">
-                                </form>
+                            <td>
+                                <a href="order-detail.jsp?id=${o.orderID}">#${o.orderID}</a>
+
                             </td>
                             <td>${o.orderDate}</td>
                             <td>${o.requiredDate}</td>

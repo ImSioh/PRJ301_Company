@@ -5,6 +5,7 @@
 package dal;
 
 import java.sql.Date;
+import java.util.logging.Logger;
 
 /**
  *
@@ -172,8 +173,33 @@ public class Orders {
         return status;
     }    
     
+//    @Override
+//    public String toString() {
+//        return "Orders{" + "OrderID=" + orderID + ", CustomerID=" + customerID + ", EmployeeID=" + employeeID + ", OrderDate=" + orderDate + ", RequiredDate=" + requiredDate + ", ShippedDate=" + shippedDate + ", Freight=" + freight + ", ShipName=" + shipName + ", ShipAddress=" + shipAddress + ", ShipCity=" + shipCity + ", ShipRegion=" + shipRegion + ", ShipPostalCode=" + shipPostalCode + ", ShipCountry=" + shipCountry + '}';
+//    }
+
     @Override
     public String toString() {
-        return "Orders{" + "OrderID=" + orderID + ", CustomerID=" + customerID + ", EmployeeID=" + employeeID + ", OrderDate=" + orderDate + ", RequiredDate=" + requiredDate + ", ShippedDate=" + shippedDate + ", Freight=" + freight + ", ShipName=" + shipName + ", ShipAddress=" + shipAddress + ", ShipCity=" + shipCity + ", ShipRegion=" + shipRegion + ", ShipPostalCode=" + shipPostalCode + ", ShipCountry=" + shipCountry + '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("Orders{");
+        sb.append("orderID=").append(orderID);
+        sb.append(", customerID=").append(customerID);
+        sb.append(", employeeID=").append(employeeID);
+        sb.append(", orderDate=").append(orderDate);
+        sb.append(", requiredDate=").append(requiredDate);
+        sb.append(", shippedDate=").append(shippedDate);
+        sb.append(", freight=").append(freight);
+        sb.append(", shipName=").append(shipName);
+        sb.append(", shipAddress=").append(shipAddress);
+        sb.append(", shipCity=").append(shipCity);
+        sb.append(", shipRegion=").append(shipRegion);
+        sb.append(", shipPostalCode=").append(shipPostalCode);
+        sb.append(", shipCountry=").append(shipCountry);
+        sb.append('}');
+        return sb.toString();
     }
+
+
+    
+    
 }

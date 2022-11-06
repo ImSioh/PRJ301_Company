@@ -18,16 +18,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     </head>
     <body>
-        <%
-            if(request.getSession().getAttribute("accSession")==null) {
-        %>
-        <c:redirect url="error.jsp"></c:redirect>
-        <%  } else { 
-                Account acc = (Account)request.getSession().getAttribute("accSession");
-                if(acc.getRole()==2){
-        %>
-        <c:redirect url="error.jsp"></c:redirect>
-        <%  } else { %>
+
         <div id="container">
             <div id="header">
                 <div id="logo-admin">
@@ -46,9 +37,9 @@
             <div id="content">
                 <div id="content-left">
                     <ul>
-                        <a href="dashboard.jsp"><li>Dashboard</li></a>
+                        <a href="dashboard"><li>Dashboard</li></a>
                         <a href="order-list"><li>Orders</li></a>
                         <a href="product-list"><li>Products</li></a>
-                        <a href="#"><li>Customers</li></a>
+                        <a href="customer-list"><li>Customers</li></a>
                     </ul>
                 </div>

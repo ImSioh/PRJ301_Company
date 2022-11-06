@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ProductDAO extends DBContext {
 
@@ -65,15 +66,29 @@ public class ProductDAO extends DBContext {
         return null;
     }
 
-    public ArrayList<Product> getProductByKeyword(String keyword) {
+    public ArrayList<Product> getProductByKeyword(String keyword, HashMap<String, String> filter) {
                 ArrayList<Product> pro = new ArrayList<>();
+                            int sql_param_counter = 1;
         try {
             String sql = "select * from Products\n"
                     + "where ProductName like ?";
+            
+            String categoryID = filter.get("CategoryID");
+            if (categoryID != null){
+                sql += " and CategoryID = ?";
+            }
+            
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, "%"+keyword+"%");
+            
+            ps.setString(sql_param_counter, "%"+keyword+"%");
+            sql_param_counter += 1;
+            
+            if (categoryID != null){
+                ps.setString(sql_param_counter, categoryID);
+                sql_param_counter += 1;               
+            }            
+            
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
                 int ProductID2 = rs.getInt(1);
                 String ProductName = rs.getString(2);
@@ -373,7 +388,10 @@ public class ProductDAO extends DBContext {
 //            System.out.println(product);
 //        }
         
-        ArrayList<Product> list = new ProductDAO().getProductByKeyword("ch");
+        HashMap<String, String> filters = new HashMap<>();
+        filters.put("CategoryID", "1");
+
+        ArrayList<Product> list = new ProductDAO().getProductByKeyword("ch", filters);
         for (Product product : list) {
             System.out.println(product);
         }
