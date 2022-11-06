@@ -13,10 +13,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import models.ProductDAO;
 
-/**
- *
- * @author phamt
- */
 public class Search extends HttpServlet{
 
     @Override

@@ -83,7 +83,7 @@
                                             </td>
                                         </tr>
                                     </c:if>
-                                    <c:forEach items="${product}" var="p" begin="0" end="9">
+                                    <c:forEach items="${product}" var="p">
                                         <tr>
                                             <td><a href="detail?pid=${p.getProductID()}">#${p.getProductID()}</a></td>
                                             <td>${p.getProductName()}</td>

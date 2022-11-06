@@ -11,10 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-/**
- *
- * @author Asus
- */
 public class EmployeeDAO extends DBContext {
 
     public ArrayList<Employee> getAllEmployee() {

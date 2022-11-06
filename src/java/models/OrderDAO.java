@@ -13,16 +13,13 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Asus
- */
 public class OrderDAO extends DBContext {
 
     public ArrayList<Orders> getAllOrder() {
         ArrayList<Orders> order = new ArrayList<>();
         try {
-            String sql = "select * from Orders";
+            String sql = "select * from Orders\n"
+                    + "order by OrderDate desc\n";
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
@@ -55,7 +52,8 @@ public class OrderDAO extends DBContext {
         ArrayList<Orders> order = new ArrayList<>();
         try {
             String sql = "select * from Orders\n"
-                    + "where OrderID like ?";
+                    + "where OrderID like ?\n"
+                    + "order by OrderDate desc\n";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, "%" + keyword + "%");
             ResultSet rs = ps.executeQuery();
@@ -178,7 +176,7 @@ public class OrderDAO extends DBContext {
         int start = page * elements - elements;
         try {
             String sql = "select * from Orders\n"
-                    + "order by OrderID\n"
+                    + "order by OrderDate desc\n"
                     + "offset ? rows\n"
                     + "fetch next ? rows only";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -222,9 +220,12 @@ public class OrderDAO extends DBContext {
 //        for (Orders o : orders) {
 //            System.out.println(o);
 //        }
-        ArrayList<Orders> order2 = new OrderDAO().getOrdersByPage(1, 10);
-        for (Orders orders : order2) {
-            System.out.println(orders);
-        }
+//        ArrayList<Orders> order2 = new OrderDAO().getOrdersByPage(1, 10);
+//        for (Orders orders : order2) {
+//            System.out.println(orders);
+//        }
+        
+        ArrayList<Orders> order3 = new OrderDAO().getAllOrder();
+        System.out.println("size = " + order3.size());
     }
 }

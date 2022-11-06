@@ -4,26 +4,38 @@
  */
 package dal;
 
-/**
- *
- * @author phamt
- */
 public class OrderDetail {
 
     private int orderID;
     private int productID;
-    private long unitPrice;
+    private double unitPrice;
     private int quantity;
-    private long discount;
+    private double discount;
     private String productName;
 
-    public OrderDetail(int OrderID, int ProductID, long UnitPrice, int Quantity, long Discount, String ProductName) {
-        this.orderID = OrderID;
-        this.productID = ProductID;
-        this.unitPrice = UnitPrice;
-        this.quantity = Quantity;
-        this.discount = Discount;
-        this.productName = ProductName;
+    public OrderDetail() {
+    }
+
+    public OrderDetail(int productID, double unitPrice, int quantity) {
+        this.productID = productID;
+        this.unitPrice = unitPrice;
+        this.quantity = quantity;
+    }
+
+    public OrderDetail(int productID, double unitPrice, int quantity, String productName) {
+        this.productID = productID;
+        this.unitPrice = unitPrice;
+        this.quantity = quantity;
+        this.productName = productName;
+    }
+
+    public OrderDetail(int orderID, int productID, double unitPrice, int quantity, double discount, String productName) {
+        this.orderID = orderID;
+        this.productID = productID;
+        this.unitPrice = unitPrice;
+        this.quantity = quantity;
+        this.discount = discount;
+        this.productName = productName;
     }
 
     public int getOrderID() {
@@ -34,25 +46,25 @@ public class OrderDetail {
         return productID;
     }
 
-    public long getUnitPrice() {
-        return unitPrice;
-    }
-
     public int getQuantity() {
         return quantity;
     }
 
-    public long getDiscount() {
+    public double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public double getDiscount() {
         return discount;
     }
 
     public String getProductName() {
         return productName;
     }
-    
-      public long getAmmount() {
-        return unitPrice*quantity;
-    }  
+
+    public double getAmmount() {
+        return unitPrice * quantity;
+    }
 
     @Override
     public String toString() {

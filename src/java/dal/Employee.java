@@ -6,10 +6,6 @@ package dal;
 
 import java.sql.Date;
 
-/**
- *
- * @author Asus
- */
 public class Employee {
 
     private int employeeID;

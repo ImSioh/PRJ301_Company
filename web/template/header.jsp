@@ -48,12 +48,16 @@
                 <div id="logo">
                     <a href="<%= path %>/home"><img src="<%= path %>/img/logo.png"/></a>
                 </div>
-                <div class="header-search">
-                    <form action="search" id="usersearch">
-                        <input type="text" name="keyword" placeholder="Which product do you want to find?">
-                        <input type="submit" value="Search">
-                    </form>
-                </div>
+                <%--<c:if test="${pageContext.request.requestURL != 'http://localhost:9999/PRJ301_Company/account/../signin.jsp'
+                              && pageContext.request.requestURL != 'http://localhost:9999/PRJ301_Company/account/../signup.jsp'
+                              && pageContext.request.requestURL != 'http://localhost:9999/PRJ301_Company/forgot.jsp'}">--%>
+                      <div class="header-search">
+                          <form action="search" id="usersearch">
+                              <input type="text" name="keyword" placeholder="Which product do you want to find?">
+                              <input type="submit" value="Search">
+                          </form>
+                      </div>
+                <%--</c:if>--%>
                 <div id="banner">
                     <ul>
                         <li><a href="<%= path %>/cart">Cart: 0</a></li>

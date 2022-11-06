@@ -41,16 +41,16 @@
                     %>
 
                     <c:forEach items="${ods}" var="od">
-
-                        <div class="profile-order-content">
-                            <div class="profile-order-content-col1">
-                                <a href="detail?pid=${od.getProductID()}"><img src="img/2.jpg" width="100%"/></a>
+                        <div class="order-detail">
+                            <div class="profile-order-content">
+                                <div class="profile-order-content-col1">
+                                    <a href="detail?pid=${od.getProductID()}"><img src="img/2.jpg" width="100%"/></a>
+                                </div>
+                                <div class="profile-order-content-col2">${od.getProductName()}</div>
+                                <div class="profile-order-content-col3">Quantity: ${od.getQuantity()}</div>
+                                <div class="profile-order-content-col4">${od.getAmmount()} $</div>
                             </div>
-                            <div class="profile-order-content-col2">${od.getProductName()}</div>
-                            <div class="profile-order-content-col3">Quantity: ${od.getQuantity()}</div>
-                            <div class="profile-order-content-col4">${od.getAmmount()} $</div>
                         </div>
-
                     </c:forEach>
                 </c:forEach>
             </div>
@@ -63,14 +63,23 @@
 
 <script type="text/javascript" src="lib/jquery/dist/jquery.min.js"></script>
 <script>
-                                    $(document).ready(function () {
-                                        $(".order-detail").hide();
-                                        $(".order-id").click(function () {
-                                            // $(".order-detail").show();
-                                            // $(".order-detail").fadeIn(1000);
-                                            $(".order-detail").toggle(1000);
-                                        });
-                                    });
+                                    function show(o) {
+                                        console.log(o)
+                                        if (o.nextElementSibling.style.display === "flex") {
+                                            o.nextElementSibling.style.display = "none";
+                                        } else {
+                                            o.nextElementSibling.style.display = "flex";
+                                        }
+                                    }
+
+//                            $(document).ready(function () {
+//                                $(".order-detail").hide();
+//                                $(".order-id").click(function () {
+//                                    // $(".order-detail").show();
+//                                    // $(".order-detail").fadeIn(1000);
+//                                    $(".order-detail").toggle(1000);
+//                                });
+//                            });
 
                                     function warnCancel() {
                                         if (confirm("Cancel order will not be reverted! Do you want to continue?")) {

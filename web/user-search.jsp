@@ -7,34 +7,34 @@
 
 
 <style>
- .card-layout {
-    display: flex;
+    .card-layout {
+        display: flex;
 
-    /* Put a card in the next row when previous cards take all width */
-    flex-wrap: wrap;
+        /* Put a card in the next row when previous cards take all width */
+        flex-wrap: wrap;
 
-    margin-left: -0.25rem;
-    margin-right: -0.25rem;
-}
+        margin-left: -0.25rem;
+        margin-right: -0.25rem;
+    }
 
-.card-layout__item {
-    /* There will be 3 cards per row */
-    flex-basis: 22%;
+    .card-layout__item {
+        /* There will be 3 cards per row */
+        flex-basis: 22%;
 
-    padding-left: 0.25rem;
-    padding-right: 0.25rem;
-}     
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+    }
 </style>
 
 <div id="content">
-<!--    <div id="content-left">
-        <h3>CATEGORY</h3>
-        <c:forEach items="${category}" var="c">
-            <ul>
-                <a href="category?id=${c.getCategoryID()}"><li>${c.getCategoryName()}</li></a>
-            </ul>
-        </c:forEach>
-    </div>-->
+    <!--    <div id="content-left">
+            <h3>CATEGORY</h3>
+    <c:forEach items="${category}" var="c">
+        <ul>
+            <a href="category?id=${c.getCategoryID()}"><li>${c.getCategoryName()}</li></a>
+        </ul>
+    </c:forEach>
+</div>-->
 
     <div>
         <div class="path">Search result</b></div>

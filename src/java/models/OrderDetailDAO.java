@@ -12,10 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-/**
- *
- * @author phamt
- */
 public class OrderDetailDAO extends DBContext {
 
     public ArrayList<OrderDetail> getOrderDetailsByOrderID(int OrderID) {
@@ -33,9 +29,9 @@ public class OrderDetailDAO extends DBContext {
             while (rs.next()) {
 
                 int ProductID = rs.getInt("ProductID");
-                long UnitPrice = rs.getLong("UnitPrice");
+                double UnitPrice = rs.getDouble("UnitPrice");
                 int Quantity = rs.getInt("Quantity");
-                long Discount = rs.getLong("Discount");
+                double Discount = rs.getDouble("Discount");
                 String ProductName = rs.getString("ProductName");
 
                 OrderDetail od = new OrderDetail(ProductID, ProductID, UnitPrice, Quantity, Discount, ProductName);
@@ -46,9 +42,9 @@ public class OrderDetailDAO extends DBContext {
         }
         return ods;
     }
-    
+
     public static void main(String[] args) {
-                ArrayList<OrderDetail> ods = new OrderDetailDAO().getOrderDetailsByOrderID(11072);
+        ArrayList<OrderDetail> ods = new OrderDetailDAO().getOrderDetailsByOrderID(11072);
         for (OrderDetail od : ods) {
             System.out.println(od);
         }

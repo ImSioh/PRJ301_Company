@@ -1,9 +1,3 @@
-<%-- 
-    Document   : Judge
-    Created on : Oct 23, 2022, 10:42:53 PM
-    Author     : Anh
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

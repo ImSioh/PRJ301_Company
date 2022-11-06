@@ -12,8 +12,8 @@
                 <div>Company name: <br/>${cus.companyName}</div>
                 <div>Contact name: <br/>${cus.contactName}</div>
                 <div>
-                    <a href="profile-edit?id=${cus.customerID}"><input type="submit" value="Edit info"/></a>
-
+                    <a href="profile-edit?id=${cus.customerID}">
+                        <input type="submit" value="Edit info"/></a>
                 </div>
             </div>
             <div class="profile-content-col">

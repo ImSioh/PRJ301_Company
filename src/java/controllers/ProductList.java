@@ -53,7 +53,7 @@ public class ProductList extends HttpServlet {
             if (request.getSession().getAttribute("accSession") != null) {
                 request.getRequestDispatcher("product-list.jsp").forward(request, response);
             } else {
-                response.sendRedirect("product-list.jsp");
+                response.sendRedirect("error.jsp");
             }
         } catch (Exception e) {
 

@@ -11,10 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import models.ProductDAO;
 
-/**
- *
- * @author Asus
- */
 public class ProductDelete extends HttpServlet {
 
     @Override
@@ -24,8 +20,9 @@ public class ProductDelete extends HttpServlet {
             int ProductID = Integer.parseInt(request.getParameter("id"));
             ProductDAO pd = new ProductDAO();
             pd.deleteProductById(ProductID);
-
-            response.sendRedirect("product-list.jsp");
+            response.sendRedirect("product-list");
+        } else {
+            response.sendRedirect("error.jsp");
         }
     }
 }
