@@ -12,6 +12,9 @@ public class Orders {
     private int orderID;
     private String customerID;
     private int employeeID;
+    private String EmployeeName;
+    private String Customer;
+
     private Date orderDate;
     private Date requiredDate;
     private Date shippedDate;
@@ -35,6 +38,24 @@ public class Orders {
         this.shippedDate = ShippedDate;
     }
 
+    public Orders(int orderID, String customerID, int employeeID, String EmployeeName, String Customer, Date orderDate, Date requiredDate, Date shippedDate, double freight, String shipName, String shipAddress, String shipCity, String shipRegion, String shipPostalCode, String shipCountry) {
+        this.orderID = orderID;
+        this.customerID = customerID;
+        this.employeeID = employeeID;
+        this.EmployeeName = EmployeeName;
+        this.Customer = Customer;
+        this.orderDate = orderDate;
+        this.requiredDate = requiredDate;
+        this.shippedDate = shippedDate;
+        this.freight = freight;
+        this.shipName = shipName;
+        this.shipAddress = shipAddress;
+        this.shipCity = shipCity;
+        this.shipRegion = shipRegion;
+        this.shipPostalCode = shipPostalCode;
+        this.shipCountry = shipCountry;
+    }
+
     public Orders(int OrderID, String CustomerID, int EmployeeID, Date OrderDate, Date RequiredDate, Date ShippedDate, double Freight, String ShipName, String ShipAddress, String ShipCity, String ShipRegion, String ShipPostalCode, String ShipCountry) {
         this.orderID = OrderID;
         this.customerID = CustomerID;
@@ -51,6 +72,8 @@ public class Orders {
         this.shipCountry = ShipCountry;
     }
 
+
+    
     public int getOrderID() {
         return orderID;
     }
@@ -155,6 +178,24 @@ public class Orders {
         this.shipCountry = ShipCountry;
     }
 
+    public String getEmployeeName() {
+        return EmployeeName;
+    }
+
+    public void setEmployeeName(String EmployeeName) {
+        this.EmployeeName = EmployeeName;
+    }
+
+    public String getCustomer() {
+        return Customer;
+    }
+
+    public void setCustomer(String Customer) {
+        this.Customer = Customer;
+    }
+    
+    
+
     public String getStatus() {
         String status = "";
         if (this.getRequiredDate() != null && this.getShippedDate() == null) {
@@ -188,7 +229,4 @@ public class Orders {
         return sb.toString();
     }
 
-
-    
-    
 }

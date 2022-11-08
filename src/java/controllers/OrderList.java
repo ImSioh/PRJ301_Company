@@ -73,7 +73,7 @@ public class OrderList extends HttpServlet {
 
             if (keyword == null) {
                 odList = new OrderDAO().getOrdersByPage(page, elements);
-                numberOfPage = (int) Math.ceil(oDAO.getAllOrder().size() / elements);
+                numberOfPage = (int) Math.ceil(oDAO.getAllOrder().size() / (float)elements);
 
             } else {
                 keyword = keyword.trim();
@@ -83,7 +83,7 @@ public class OrderList extends HttpServlet {
                 filters.put("EndOrderDate", request.getParameter("txtEndOrderDate"));
                 
                 odList = new OrderDAO().getAllOrderKeywordPaging(keyword, filters, page, elements);
-                numberOfPage = (int) Math.ceil(oDAO.getAllOrderKeyword(keyword, filters).size() / elements);
+                numberOfPage = (int) Math.ceil(oDAO.getAllOrderKeyword(keyword, filters).size() / (float)elements);
             }
             
             

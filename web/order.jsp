@@ -71,26 +71,15 @@
                             <td>${o.orderDate}</td>
                             <td>${o.requiredDate}</td>
                             <td>${o.shippedDate}</td>
-                            <c:forEach items="${employee}" var="e">
-                                <c:if test="${o.employeeID==e.employeeID}">
-                                    <td>${e.firstName}</td>
-                                </c:if>
-                            </c:forEach>
-                            <c:forEach items="${customer}" var="c">
-                                <c:if test="${o.customerID==c.customerID}">
-                                    <td>${c.contactName}</td>
-                                </c:if>
-                            </c:forEach>
+                            <td>${o.getEmployeeName()}</td>
+                            <td>${o.getCustomer()}</td>
                             <td>${o.freight}</td>
                             <c:choose>
-                                <c:when test="${o.shippedDate!=null}">
-                                    <td style="color: green; font-weight: bold">Completed</td>
+                                <c:when test="${o.getStatus() eq 'completed'}">
+                                    <td style="color: green;">Completed</td>
                                 </c:when>
-                                <c:when test="${o.shippedDate==null}">
-                                    <td style="color: blue; font-weight: bold">Pending | <a href="#" style="color: red; font-weight: bold; text-decoration: none;">Cancel</a></td>
-                                </c:when>
-                                <c:when test="${o.shippedDate > o.requiredDate}">
-                                    <td style="color: red; font-weight: bold">Out of date</td>
+                                <c:when test="${o.getStatus() eq 'pending'}">
+                                    <td style="color: blue;">Pending | <a href="order-list?action=cancel&id=${o.getOrderID()}" onclick="return warnCancel()">Cancel</a></td>
                                 </c:when>
                                 <c:otherwise>
                                     <td style="color: red; font-weight: bold">Order canceled</td>

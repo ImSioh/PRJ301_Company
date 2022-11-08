@@ -42,7 +42,7 @@ public class Search extends HttpServlet{
         filters.put("CategoryID", req.getParameter("ddlCategory"));
 
         ArrayList<Product> ps = pd.getProductByKeywordPaging(keyword, filters, page, elements);
-        numberOfPage = (int) Math.ceil(pd.getProductByKeyword(keyword, filters).size() / elements);               
+        numberOfPage = (int) Math.ceil(pd.getProductByKeyword(keyword, filters).size() / (float)elements);               
         ArrayList<Category> c = new CategoryDAO().getCategory();
         
         

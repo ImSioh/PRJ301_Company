@@ -43,27 +43,60 @@ public class OrderDAO extends DBContext {
         }
         return order;
     }
-    
+
+    public ArrayList<Orders> parseResultSetToArray2(ResultSet rs) {
+        ArrayList<Orders> order = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                int OrderID = rs.getInt("OrderID");
+                String CustomerID = rs.getString("CustomerID");
+                int EmployeeID = rs.getInt("EmployeeID");
+                String EmployeeName = rs.getString("EmployeeName");
+                String Customer = rs.getString("CustomerName");
+                Date OrderDate = rs.getDate("OrderDate");
+                Date RequiredDate = rs.getDate("RequiredDate");
+                Date ShippedDate = rs.getDate("ShippedDate");
+                double Freight = rs.getDouble("Freight");
+                String ShipName = rs.getString("ShipName");
+                String ShipAddress = rs.getString("ShipAddress");
+                String ShipCity = rs.getString("ShipCity");
+                String ShipRegion = rs.getString("ShipRegion");
+                String ShipPostalCode = rs.getString("ShipPostalCode");
+                String ShipCountry = rs.getString("ShipCountry");
+
+                Orders o = new Orders(OrderID, CustomerID, EmployeeID, EmployeeName, Customer, OrderDate, RequiredDate, ShippedDate, Freight, ShipName, ShipAddress, ShipCity, ShipRegion, ShipPostalCode, ShipCountry);
+                order.add(o);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return order;
+    }
+
     public int getNumOrders() {
         int numOrder = -1;
         try {
             String sql = "select COUNT(*) from Orders\n";
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
-            
+
             rs.next();
             numOrder = rs.getInt(1);
-            
+
         } catch (SQLException e) {
             System.out.println(e);
         }
         return numOrder;
-    }   
-    
+    }
+
     public ArrayList<Orders> getAllOrder() {
         ArrayList<Orders> order = new ArrayList<>();
         try {
-            String sql = "select * from Orders\n"
+            String sql = "select o.*, (e.FirstName + ' ' + e.FirstName) as EmployeeName, ContactName from Orders o\n"
+                    + "left join Customers c\n"
+                    + "on o.CustomerID = c.CustomerID\n"
+                    + "left join Employees e\n"
+                    + "on o.EmployeeID = e.EmployeeID\n"
                     + "order by OrderDate desc\n";
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -176,7 +209,11 @@ public class OrderDAO extends DBContext {
         }
 
         try {
-            String sql = "select * from Orders\n"
+            String sql = "select o.*, (e.FirstName + ' ' + e.FirstName) as EmployeeName, ContactName as CustomerName from Orders o\n"
+                    + "left join Customers c\n"
+                    + "on o.CustomerID = c.CustomerID\n"
+                    + "left join Employees e\n"
+                    + "on o.EmployeeID = e.EmployeeID\n"
                     + "where OrderID like ? \n"
                     + "and (OrderDate between ? and ?)\n"
                     + "order by OrderDate desc\n"
@@ -291,7 +328,11 @@ public class OrderDAO extends DBContext {
         ArrayList<Orders> order = new ArrayList<>();
         int start = page * elements - elements;
         try {
-            String sql = "select * from Orders\n"
+            String sql = "select o.*, (e.FirstName + ' ' + e.FirstName) as EmployeeName, ContactName as CustomerName from Orders o\n"
+                    + "left join Customers c\n"
+                    + "on o.CustomerID = c.CustomerID\n"
+                    + "left join Employees e\n"
+                    + "on o.EmployeeID = e.EmployeeID\n"
                     + "order by OrderDate desc\n"
                     + "offset ? rows\n"
                     + "fetch next ? rows only";
@@ -299,10 +340,59 @@ public class OrderDAO extends DBContext {
             ps.setInt(1, start);
             ps.setInt(2, elements);
             ResultSet rs = ps.executeQuery();
-            order = parseResultSetToArray(rs);
+            order = parseResultSetToArray2(rs);
         } catch (Exception e) {
         }
         return order;
+    }
+
+    public int addOrder(Customer cus, Cart cart, Date requiredDate) {
+        int res1 = 0;
+        int res3 = 0;
+        try {
+            //add vao bang [Orders]
+            String sql1 = "insert into Orders(CustomerID, OrderDate, RequiredDate, Freight, ShipCity) "
+                    + "values (?,GETDATE(),?,?,?)";
+            PreparedStatement ps1 = connection.prepareStatement(sql1);
+
+            ps1.setString(1, cus.getCustomerID());
+            ps1.setDate(2, requiredDate);
+            ps1.setDouble(3, 0);
+            ps1.setString(4, cus.getAddress());
+
+            res1 = ps1.executeUpdate();
+
+            //lay ra OrderID vua add vao
+            String sql2 = "select top 1 OrderID from Orders "
+                    + "order by OrderID desc";
+            PreparedStatement ps2 = connection.prepareStatement(sql2);
+            ResultSet rs = ps2.executeQuery();
+
+            //add OrderID vao 
+            while (rs.next()) {
+                int OrderID = rs.getInt(1);
+                for (Item i : cart.getItems()) {
+                    String sql3 = "insert into [Order Details] "
+                            + "values(?,?,?,?,?)";
+                    PreparedStatement ps3 = connection.prepareStatement(sql3);
+
+                    ps3.setInt(1, OrderID);
+                    ps3.setInt(2, i.getProduct().getProductID());
+                    ps3.setDouble(3, i.getProduct().getUnitPrice());
+                    ps3.setInt(4, i.getQuantity());
+                    ps3.setDouble(5, 0);
+                    res3 = ps3.executeUpdate();
+                    cart.removeItem(OrderID);
+                }
+            }
+        } catch (Exception e) {
+
+        }
+        if (res1 != 0 && res3 != 0) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     public static void main(String[] args) {

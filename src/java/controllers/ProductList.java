@@ -34,7 +34,7 @@ public class ProductList extends HttpServlet {
         
         if (keyword == null) {
             pList = pd.getProductsByPage(page, elements);
-            numberOfPage = (int) Math.ceil(pd.getProduct().size() / elements);
+            numberOfPage = (int) Math.ceil(pd.getProduct().size() / (float) elements);
 
         } else {
             keyword = keyword.trim();
@@ -43,7 +43,7 @@ public class ProductList extends HttpServlet {
             filters.put("CategoryID", request.getParameter("ddlCategory"));
 
             pList = pd.getProductByKeywordPaging(keyword, filters, page, elements);
-            numberOfPage = (int) Math.ceil(pd.getProductByKeyword(keyword, filters).size() / elements);
+            numberOfPage = (int) Math.ceil(pd.getProductByKeyword(keyword, filters).size() / (float) elements);
 
         }
 

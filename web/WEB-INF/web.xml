@@ -38,7 +38,7 @@
     </servlet>
     <servlet>
         <servlet-name>CartServlet</servlet-name>
-        <servlet-class>controllers.CartServlet</servlet-class>
+        <servlet-class>controllers.CartProfileCustomer</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AccountProfileEdit</servlet-name>
@@ -67,6 +67,18 @@
     <servlet>
         <servlet-name>CustomerList</servlet-name>
         <servlet-class>controllers.CustomerList</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CartAdd</servlet-name>
+        <servlet-class>controllers.CartAdd</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CartOrder</servlet-name>
+        <servlet-class>controllers.CartOrder</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CartQuantity</servlet-name>
+        <servlet-class>controllers.CartQuantity</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AccountSignIn</servlet-name>
@@ -135,5 +147,17 @@
     <servlet-mapping>
         <servlet-name>CustomerList</servlet-name>
         <url-pattern>/customer-list</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CartAdd</servlet-name>
+        <url-pattern>/add-to-cart</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CartOrder</servlet-name>
+        <url-pattern>/cart-order</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CartQuantity</servlet-name>
+        <url-pattern>/cart-quantity</url-pattern>
     </servlet-mapping>
 </web-app>
