@@ -36,12 +36,12 @@ public class ProductCreate extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String ProductName = req.getParameter("txtProductName");
         String QuantityPerUnit = req.getParameter("txtQuantityPerUnit");
-        String UnitPrice_raw = req.getParameter("txtUnitPrice");
-        String ReorderLevel_raw = req.getParameter("txtReorderLevel");
         //int UnitsOnOrder = Integer.parseInt(req.getParameter("txtUnitsOnOrder"));
         boolean Discontinued = Boolean.parseBoolean(req.getParameter("chkDiscontinued"));
 
         //raw to validate
+        String UnitPrice_raw = req.getParameter("txtUnitPrice");
+        String ReorderLevel_raw = req.getParameter("txtReorderLevel");
         String UnitsInStock_raw = req.getParameter("txtUnitsInStock");
         String Category_raw = req.getParameter("ddlCategory");
 
@@ -76,6 +76,7 @@ public class ProductCreate extends HttpServlet {
             msgReorderLevel = "ReorderLevel is required.";
             req.setAttribute("msgReorderLevel", msgReorderLevel);
         }
+
         if (!msgProductName.equals("") || !msgCategory.equals("") || !msgUnitsInStock.equals("")
                 || !msgQuantityPerUnit.equals("") || !msgUnitPrice.equals("") || !msgReorderLevel.equals("")) {
             ArrayList<Category> c = new CategoryDAO().getCategory();
@@ -83,8 +84,8 @@ public class ProductCreate extends HttpServlet {
             req.getRequestDispatcher("product-create.jsp").forward(req, resp);
         } else {
             //get Int input of CateID & UnitsStock
-            int CategoryID = Integer.parseInt(req.getParameter("ddlCategory"));
-            int UnitsInStock = Integer.parseInt(req.getParameter("txtUnitsInStock"));
+            int CategoryID = Integer.parseInt(Category_raw);
+            int UnitsInStock = Integer.parseInt(UnitsInStock_raw);
             double UnitPrice = Double.parseDouble(UnitPrice_raw);
             int ReorderLevel = Integer.parseInt(ReorderLevel_raw);
 

@@ -13,16 +13,24 @@
                 <div class="content-main-1">
                     <label>Product ID:</label>
                     <input type="text" name="txtProductID" id="" value="${p.getProductID()}" readonly>
-                    <label>Product name (*):</label><br/>
-                    <input type="text" name="txtProductName" id="" value="${p.getProductName()}"><br/>
+
+                <label>Product name (*):</label><br/>
+                <input type="text" name="txtProductName" id="" value="${p.getProductName()}"><br/>
                 <c:if test="${msgProductName!=null}">
                     <span class="msg-error">${msgProductName}</span><br/>
                 </c:if>
 
                 <label>Unit price:</label><br/>
                 <input type="text" name="txtUnitPrice" id="" value="${p.getUnitPrice()}"><br/>
+                <c:if test="${msgUnitPrice!=null}">
+                    <span class="msg-error">${msgUnitPrice}</span><br/>
+                </c:if>
+
                 <label>Quantity per unit:</label><br/>
                 <input type="text" name="txtQuantityPerUnit" id="" value="${p.getQuantityPerUnit()}"><br/>
+                <c:if test="${msgQuantityPerUnit!=null}">
+                    <span class="msg-error">${msgQuantityPerUnit}</span><br/>
+                </c:if>
 
                 <label>Units in stock (*):</label><br/>
                 <input type="text" name="txtUnitsInStock" id="" value="${p.getUnitsInStock()}"><br/>
@@ -48,7 +56,10 @@
 
                 <label>Reorder level:</label><br/>
                 <input type="text" name="txtReorderLevel" id="" value="${p.getReorderLevel()}"><br/>
-
+                <c:if test="${msgReorderLevel!=null}">
+                    <span class="msg-error">${msgReorderLevel}</span><br/>
+                </c:if>
+ 
                 <label>Units on order:</label><br/>
                 <input type="text" name="txtUnitsOnOrder" id="" value="${p.getUnitsOnOrder()}" readonly><br/>
 

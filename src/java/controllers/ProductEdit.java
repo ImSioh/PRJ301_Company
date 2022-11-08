@@ -40,21 +40,22 @@ public class ProductEdit extends HttpServlet {
             throws ServletException, IOException {
         int ProductID = Integer.parseInt(request.getParameter("txtProductID"));
         String ProductName = request.getParameter("txtProductName");
-//        int CategoryID = Integer.parseInt(request.getParameter("ddlCategory"));
         String QuantityPerUnit = request.getParameter("txtQuantityPerUnit");
-        double UnitPrice = Double.parseDouble(request.getParameter("txtUnitPrice"));
-//        int UnitsInStock = Integer.parseInt(request.getParameter("txtUnitsInStock"));
         int UnitsOnOrder = Integer.parseInt(request.getParameter("txtUnitsOnOrder"));
-        int ReorderLevel = Integer.parseInt(request.getParameter("txtReorderLevel"));
         boolean Discontinued = Boolean.parseBoolean(request.getParameter("chkDiscontinued"));
 
         //raw to validate
+        String UnitPrice_raw = request.getParameter("txtUnitPrice");
+        String ReorderLevel_raw = request.getParameter("txtReorderLevel");
         String UnitsInStock_raw = request.getParameter("txtUnitsInStock");
         String Category_raw = request.getParameter("ddlCategory");
 
         String msgProductName = "";
         String msgUnitsInStock = "";
         String msgCategory = "";
+        String msgQuantityPerUnit = "";
+        String msgUnitPrice = "";
+        String msgReorderLevel = "";
 
         if (ProductName.equals("")) {
             msgProductName = "Product name is required.";
@@ -68,8 +69,21 @@ public class ProductEdit extends HttpServlet {
             msgCategory = "Category is required.";
             request.setAttribute("msgCategory", msgCategory);
         }
+        if (QuantityPerUnit.equals("")) {
+            msgQuantityPerUnit = "QuantityPerUnit is required.";
+            request.setAttribute("msgQuantityPerUnit", msgQuantityPerUnit);
+        }
+        if (UnitPrice_raw.equals("")) {
+            msgUnitPrice = "UnitPrice is required.";
+            request.setAttribute("msgUnitPrice", msgUnitPrice);
+        }
+        if (ReorderLevel_raw.equals("")) {
+            msgReorderLevel = "ReorderLevel is required.";
+            request.setAttribute("msgReorderLevel", msgReorderLevel);
+        }
 
-        if (!msgProductName.equals("") || !msgCategory.equals("") || !msgUnitsInStock.equals("")) {
+        if (!msgProductName.equals("") || !msgUnitsInStock.equals("") || !msgCategory.equals("") || !msgUnitsInStock.equals("")
+                || !msgQuantityPerUnit.equals("") || !msgUnitPrice.equals("") || !msgReorderLevel.equals("")) {
             Product p = new ProductDAO().getProductById(ProductID);
             request.setAttribute("product", p);
             ArrayList<Category> c = new CategoryDAO().getCategory();
@@ -77,8 +91,10 @@ public class ProductEdit extends HttpServlet {
             request.getRequestDispatcher("product-edit.jsp").forward(request, response);
         } else {
             //get Int input of CateID & UnitsStock
-            int CategoryID = Integer.parseInt(request.getParameter("ddlCategory"));
-            int UnitsInStock = Integer.parseInt(request.getParameter("txtUnitsInStock"));
+            int CategoryID = Integer.parseInt(Category_raw);
+            int UnitsInStock = Integer.parseInt(UnitsInStock_raw);
+            double UnitPrice = Double.parseDouble(UnitPrice_raw);
+            int ReorderLevel = Integer.parseInt(ReorderLevel_raw);
 
             Product p = new Product(ProductID, ProductName, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued);
 
