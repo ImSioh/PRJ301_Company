@@ -28,7 +28,7 @@ public class Search extends HttpServlet{
 //        super.doGet(req, resp); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
         String keyword = req.getParameter("keyword").trim();
         int page = 0;
-        int elements = 10;
+        int elements = 12;
         int numberOfPage;
         ProductDAO pd = new ProductDAO();
         
