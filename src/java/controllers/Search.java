@@ -16,10 +16,6 @@ import java.util.HashMap;
 import models.CategoryDAO;
 import models.ProductDAO;
 
-/**
- *
- * @author phamt
- */
 public class Search extends HttpServlet{
 
     @Override
@@ -31,13 +27,28 @@ public class Search extends HttpServlet{
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        super.doGet(req, resp); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
         String keyword = req.getParameter("keyword").trim();
+        int page = 0;
+        int elements = 10;
+        int numberOfPage;
+        ProductDAO pd = new ProductDAO();
+        
+        try {
+            page = Integer.parseInt(req.getParameter("page"));
+        } catch (Exception e) {
+            page = 1;
+        }
         
         HashMap<String, String> filters = new HashMap<>();
         filters.put("CategoryID", req.getParameter("ddlCategory"));
 
-        ArrayList<Product> ps = new ProductDAO().getProductByKeyword(keyword, filters);
+        ArrayList<Product> ps = pd.getProductByKeywordPaging(keyword, filters, page, elements);
+        numberOfPage = (int) Math.ceil(pd.getProductByKeyword(keyword, filters).size() / elements);               
         ArrayList<Category> c = new CategoryDAO().getCategory();
-
+        
+        
+        
+        req.setAttribute("page", page);
+        req.setAttribute("numberOfPage", numberOfPage);
         req.setAttribute("category", c);
         req.setAttribute("product_list", ps);
         

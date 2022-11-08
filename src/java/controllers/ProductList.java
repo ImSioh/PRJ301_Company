@@ -18,10 +18,23 @@ public class ProductList extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ArrayList<Product> pList = new ArrayList<>();
+        ProductDAO pd = new ProductDAO();
         String keyword = request.getParameter("txtSearch");
+        int page = 0;
+        int elements = 10;
+        int numberOfPage;
 
+        try {
+            page = Integer.parseInt(request.getParameter("page"));
+        } catch (Exception e) {
+            page = 1;
+        }
+
+//        || keyword.trim().equals("")
+        
         if (keyword == null) {
-            pList = new ProductDAO().getProduct();
+            pList = pd.getProductsByPage(page, elements);
+            numberOfPage = (int) Math.ceil(pd.getProduct().size() / elements);
 
         } else {
             keyword = keyword.trim();
@@ -29,11 +42,15 @@ public class ProductList extends HttpServlet {
             HashMap<String, String> filters = new HashMap<>();
             filters.put("CategoryID", request.getParameter("ddlCategory"));
 
-            pList = new ProductDAO().getProductByKeyword(keyword, filters);
+            pList = pd.getProductByKeywordPaging(keyword, filters, page, elements);
+            numberOfPage = (int) Math.ceil(pd.getProductByKeyword(keyword, filters).size() / elements);
+
         }
 
         ArrayList<Category> c = new CategoryDAO().getCategory();
 
+        request.setAttribute("page", page);
+        request.setAttribute("numberOfPage", numberOfPage);
         request.setAttribute("product", pList);
         request.setAttribute("category", c);
 

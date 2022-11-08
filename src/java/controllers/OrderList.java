@@ -8,7 +8,6 @@ import dal.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,11 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import models.*;
 
-/**
- *
- * @author Asus
- */
-//@WebServlet(name = "OrderList", urlPatterns = {"/order-list"})
 public class OrderList extends HttpServlet {
 
     /**
@@ -61,13 +55,26 @@ public class OrderList extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        try {
+            int page = 0;
+            int elements = 10;
+            int numberOfPage;
+            try {
+                page = Integer.parseInt(request.getParameter("page"));
+            } catch (Exception e) {
+                page = 1;
+            }
+            request.setAttribute("page", page);
 
         if (request.getParameter("action") == null) {
             String keyword = request.getParameter("txtSearch");
             ArrayList<Orders> odList = new ArrayList<>();
+            OrderDAO oDAO = new OrderDAO();
 
             if (keyword == null) {
-                odList = new OrderDAO().getAllOrder();
+                odList = new OrderDAO().getOrdersByPage(page, elements);
+                numberOfPage = (int) Math.ceil(oDAO.getAllOrder().size() / elements);
+
             } else {
                 keyword = keyword.trim();
                 
@@ -75,10 +82,12 @@ public class OrderList extends HttpServlet {
                 filters.put("StartOrderDate", request.getParameter("txtStartOrderDate"));
                 filters.put("EndOrderDate", request.getParameter("txtEndOrderDate"));
                 
-                odList = new OrderDAO().getAllOrderKeyword(keyword, filters);
+                odList = new OrderDAO().getAllOrderKeywordPaging(keyword, filters, page, elements);
+                numberOfPage = (int) Math.ceil(oDAO.getAllOrderKeyword(keyword, filters).size() / elements);
             }
             
-
+            
+            request.setAttribute("numberOfPage", numberOfPage);
 
             ArrayList<Employee> empList = new EmployeeDAO().getAllEmployee();
             ArrayList<Customer> cusList = new CustomerDAO().getCustomer();
@@ -94,9 +103,40 @@ public class OrderList extends HttpServlet {
             int rs = new OrderDAO().cancelOrder(orderID);
 
             response.sendRedirect("order-list");
+//            OrderDAO oDAO = new OrderDAO();
+//
+//            if (request.getParameter("action") == null) {
+//                String keyword = request.getParameter("txtSearch");
+//                ArrayList<Orders> odList = new ArrayList<>();
+//                if (keyword == null || keyword.trim().equals("")) {
+//                    odList = new OrderDAO().getOrdersByPage(page, elements);
+//                } else {
+//                    odList = new OrderDAO().getAllOrderKeyword(keyword);
+//                }
+//
+//                numberOfPage = oDAO.getAllOrder().size() % elements == 0 ? oDAO.getAllOrder().size() / elements : oDAO.getAllOrder().size() / elements + 1;
+//                request.setAttribute("numberOfPage", numberOfPage);
+//
+//                ArrayList<Employee> empList = new EmployeeDAO().getAllEmployee();
+//                ArrayList<Customer> cusList = new CustomerDAO().getCustomer();
+//
+//                request.setAttribute("order", odList);
+//                request.setAttribute("employee", empList);
+//                request.setAttribute("customer", cusList);
+//
+//                request.getRequestDispatcher("order.jsp").forward(request, response);
+//
+//            } else if (request.getParameter("action").equals("cancel")) {
+//                int orderID = Integer.parseInt(request.getParameter("id"));
+//                int rs = new OrderDAO().cancelOrder(orderID);
+//                response.sendRedirect("order-list");
+//            }
+        } 
 
+    }
+        catch (Exception e) {
+            System.out.println(e);
         }
-
     }
 
     /**

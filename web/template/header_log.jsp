@@ -12,35 +12,6 @@
         <link rel="stylesheet" href="<%= path %>/css/style.css"/>
         <link rel="stylesheet" href="<c:url value="/css/style.css"/>" />
         <link rel="icon" href="<c:url value="/img/logo.png"/>" />
-
-        <style>
-            #header .header-search {
-                width: 100%;
-                margin-left: 20%;
-            }
-
-            #header .header-search {
-                padding-top: 40px;
-            }
-
-            #header .header-search input[type="text"] {
-                line-height: 30px;
-                border-radius: 10px;
-                border: 1px solid saddlebrown;
-                width: 80%;
-                padding-left: 10px;
-            }
-
-            #header .header-search input[type="submit"]{
-                width: 60px;
-                height: 30px;
-                background: saddlebrown;
-                color: white;
-                font-weight: bold;
-                border-radius: 7.5px;
-                border: 1px solid white;
-            }
-        </style>
     </head>
     <body>
         <div id="container">
@@ -48,16 +19,6 @@
                 <div id="logo">
                     <a href="<%= path %>/home"><img src="<%= path %>/img/logo.png"/></a>
                 </div>
-                <%--<c:if test="${pageContext.request.requestURL != 'http://localhost:9999/PRJ301_Company/account/../signin.jsp'
-                              && pageContext.request.requestURL != 'http://localhost:9999/PRJ301_Company/account/../signup.jsp'
-                              && pageContext.request.requestURL != 'http://localhost:9999/PRJ301_Company/forgot.jsp'}">--%>
-                      <div class="header-search">
-                          <form action="search" id="usersearch">
-                              <input type="text" name="keyword" placeholder="Which product do you want to find?">
-                              <input type="submit" value="Search">
-                          </form>
-                      </div>
-                <%--</c:if>--%>
                 <div id="banner">
                     <ul>
                         <li><a href="<%= path %>/cart">Cart: 0</a></li>

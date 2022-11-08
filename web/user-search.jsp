@@ -65,7 +65,50 @@
                 </div>
             </c:forEach>
         </div>
+        
+<!--                <div id="paging">
+                    <div class="pagination">
+                        <c:if test="${numberOfPage > 1}">
+                            <a href="product-list?page=${page-1}">&laquo;</a>
+                            <c:forEach var = "i" begin = "1" end = "${numberOfPage}">
+                                <c:choose>
+                                    <c:when test="${i==page}">
+                                        <a href="product-list?page=${i}" class="active">${i}</a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="product-list?page=${i}">${i}</a>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                            <a href="product-list?page=${page+1}">&raquo;</a>
+                        </c:if>
+                    </div>
+                </div>        -->
 
+                <div id="paging">
+                    <div class="pagination">
+                        
+                    <c:url value = "search" var = "paging_url">
+                        <c:param name = "keyword" value="${param.keyword}"/>
+                        <c:param name = "ddlCategory" value="${param.ddlCategory}"/>
+                    </c:url>
+                        
+                    <c:if test="${numberOfPage > 1}">
+                        <a href="${paging_url}&page=${page-1}">&laquo;</a>
+                        <c:forEach var = "i" begin = "1" end = "${numberOfPage}">
+                            <c:choose>
+                                <c:when test="${i==page}">
+                                    <a href="${paging_url}&page=${i}" class="active">${i}</a>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="${paging_url}&page=${i}">${i}</a>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                        <a href="${paging_url}&page=${page+1}">&raquo;</a>
+                    </c:if>
+                    </div>
+                </div>
 
     </div>
 </div>

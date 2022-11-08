@@ -34,19 +34,19 @@
                     <input type="text" name="txtSearch" placeholder="Enter order id to search"/>
                     <input type="submit" value="Search"/>
                 </form>
-                    
-                    <div>
-                        <c:if test="${not empty param.txtSearch}">   
-                            #Keyword: ${param.txtSearch}
-                        </c:if>
-                        <c:if test="${not empty param.txtStartOrderDate}">   
-                            #From: ${param.txtStartOrderDate}
-                        </c:if>                            
-                        <c:if test="${not empty param.txtEndOrderDate}">   
-                            #To: ${param.txtEndOrderDate}
-                        </c:if>
 
-                    </div>
+                <div>
+                    <c:if test="${not empty param.txtSearch}">   
+                        #Keyword: ${param.txtSearch}
+                    </c:if>
+                    <c:if test="${not empty param.txtStartOrderDate}">   
+                        #From: ${param.txtStartOrderDate}
+                    </c:if>                            
+                    <c:if test="${not empty param.txtEndOrderDate}">   
+                        #To: ${param.txtEndOrderDate}
+                    </c:if>
+
+                </div>
 
             </div>
 
@@ -83,31 +83,48 @@
                             </c:forEach>
                             <td>${o.freight}</td>
                             <c:choose>
-                                <c:when test="${o.getStatus() eq 'completed'}">
-                                    <td style="color: green;">Completed</td>
+                                <c:when test="${o.shippedDate!=null}">
+                                    <td style="color: green; font-weight: bold">Completed</td>
                                 </c:when>
-                                <c:when test="${o.getStatus() eq 'pending'}">
-                                    <td style="color: blue;">Pending | <a href="order-list?action=cancel&id=${o.getOrderID()}" onclick="return warnCancel()">Cancel</a></td>
+                                <c:when test="${o.shippedDate==null}">
+                                    <td style="color: blue; font-weight: bold">Pending | <a href="#" style="color: red; font-weight: bold; text-decoration: none;">Cancel</a></td>
+                                </c:when>
+                                <c:when test="${o.shippedDate > o.requiredDate}">
+                                    <td style="color: red; font-weight: bold">Out of date</td>
                                 </c:when>
                                 <c:otherwise>
                                     <td style="color: red; font-weight: bold">Order canceled</td>
                                 </c:otherwise>
                             </c:choose>
                         </tr>
-
                     </c:forEach>
                 </table>
             </div>
             <div id="paging">
-                <div class="pagination">
-                    <a href="#">&laquo;</a>
-                    <a href="#">1</a>
-                    <a href="#" class="active">2</a>
-                    <a href="#">3</a>
-                    <a href="#">4</a>
-                    <a href="#">5</a>
-                    <a href="#">6</a>
-                    <a href="#">&raquo;</a>
+                <div class="pagination"> 
+
+
+
+                    <c:url value = "order-list" var = "paging_url">
+                        <c:param name = "txtSearch" value="${param.txtSearch}"/>
+                        <c:param name = "txtStartOrderDate" value="${param.txtStartOrderDate}"/>
+                        <c:param name = "txtEndOrderDate" value="${param.txtEndOrderDate}"/>
+                    </c:url>
+
+                    <c:if test="${numberOfPage > 1}">
+                        <a href="${paging_url}&page=${page-1}">&laquo;</a>
+                        <c:forEach var = "i" begin = "1" end = "${numberOfPage}">
+                            <c:choose>
+                                <c:when test="${i==page}">
+                                    <a href="${paging_url}&page=${i}" class="active">${i}</a>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="${paging_url}&page=${i}">${i}</a>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                        <a href="${paging_url}&page=${page+1}">&raquo;</a>
+                    </c:if>
                 </div>
             </div>
         </div>

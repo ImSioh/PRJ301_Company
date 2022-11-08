@@ -31,7 +31,7 @@ public class ProductEdit extends HttpServlet {
         if (request.getSession().getAttribute("accSession") != null) {
             request.getRequestDispatcher("product-edit.jsp").forward(request, response);
         } else {
-            response.sendRedirect("product-list");
+            response.sendRedirect("error.jsp");
         }
     }
 

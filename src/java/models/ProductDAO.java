@@ -2,21 +2,20 @@ package models;
 
 import dal.DBContext;
 import dal.Product;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ProductDAO extends DBContext {
 
-    public ArrayList<Product> getProduct() {
+    public ArrayList<Product> parseResultSetToArray(ResultSet rs) {
         ArrayList<Product> pro = new ArrayList<>();
         try {
-            String sql = "select * from Products";
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
                 int ProductID = rs.getInt("ProductID");
                 String ProductName = rs.getString("ProductName");
@@ -32,6 +31,20 @@ public class ProductDAO extends DBContext {
 
                 pro.add(p);
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return pro;
+    }
+
+    public ArrayList<Product> getProduct() {
+        ArrayList<Product> pro = new ArrayList<>();
+        try {
+            String sql = "select * from Products";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            pro = parseResultSetToArray(rs);
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -39,7 +52,7 @@ public class ProductDAO extends DBContext {
     }
 
     public Product getProductById(int ProductID) {
-        
+
         try {
             String sql = "select * from Products where ProductID = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -67,47 +80,91 @@ public class ProductDAO extends DBContext {
     }
 
     public ArrayList<Product> getProductByKeyword(String keyword, HashMap<String, String> filter) {
-                ArrayList<Product> pro = new ArrayList<>();
-                            int sql_param_counter = 1;
+        ArrayList<Product> pro = new ArrayList<>();
+        int sql_param_counter = 1;
         try {
             String sql = "select * from Products\n"
                     + "where ProductName like ?";
-            
-            String categoryID = filter.get("CategoryID");
-            if (categoryID != null){
-                sql += " and CategoryID = ?";
-            }
-            
-            PreparedStatement ps = connection.prepareStatement(sql);
-            
-            ps.setString(sql_param_counter, "%"+keyword+"%");
-            sql_param_counter += 1;
-            
-            if (categoryID != null){
-                ps.setString(sql_param_counter, categoryID);
-                sql_param_counter += 1;               
-            }            
-            
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                int ProductID2 = rs.getInt(1);
-                String ProductName = rs.getString(2);
-                int CategoryID = rs.getInt(3);
-                String QuantityPerUnit = rs.getString(4);
-                double UnitPrice = rs.getDouble(5);
-                int UnitsInStock = rs.getInt(6);
-                int UnitsOnOrder = rs.getInt(7);
-                int ReorderLevel = rs.getInt(8);
-                boolean Discontinued = rs.getBoolean(9);
 
-                Product p = new Product(ProductID2, ProductName, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued);
-                pro.add(p);
+            String categoryID = filter.get("CategoryID");
+            if (categoryID != null) {
+                if (!categoryID.trim().equals("")){
+                sql += " and CategoryID = ?";
+                }
             }
-            return pro;
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setString(sql_param_counter, "%" + keyword + "%");
+            sql_param_counter += 1;
+
+            if (categoryID != null) {
+                if (!categoryID.trim().equals("")){
+                ps.setString(sql_param_counter, categoryID);
+                sql_param_counter += 1;
+                }
+            }
+
+            ResultSet rs = ps.executeQuery();
+            pro = parseResultSetToArray(rs);
+
         } catch (SQLException e) {
             System.out.println(e);
         }
-        return null;
+        return pro;
+    }
+    
+        public ArrayList<Product> getProductByKeywordPaging(String keyword, HashMap<String, String> filter, int page, int elements) {
+        ArrayList<Product> pro = new ArrayList<>();
+        int sql_param_counter = 1;
+        int start = page * elements - elements;
+        try {
+            String sql = "select * from Products\n"
+                    + "where ProductName like ?";
+
+            String categoryID = filter.get("CategoryID");
+            if (categoryID != null) {
+                if (!categoryID.trim().equals("")){
+                sql += " and CategoryID = ?";
+                }
+            }
+            
+            sql += "\n";
+            
+            sql += "order by ProductID\n" 
+                    + "offset ? rows\n"
+                    + "fetch next ? rows only";
+            
+            System.out.println(keyword);
+            System.out.println(categoryID);
+            System.out.println(start);
+            System.out.println(elements);
+            System.out.println();
+            
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setString(sql_param_counter, "%" + keyword + "%");
+            sql_param_counter += 1;
+
+            if (categoryID != null) {
+                if (!categoryID.trim().equals("")){
+                ps.setString(sql_param_counter, categoryID);
+                sql_param_counter += 1;
+                }
+            }
+            
+            ps.setInt(sql_param_counter, start);
+            sql_param_counter += 1;
+            ps.setInt(sql_param_counter, elements);
+            sql_param_counter += 1;
+            
+            ResultSet rs = ps.executeQuery();
+            pro = parseResultSetToArray(rs);
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return pro;
     }
 
     public int createProduct(Product p) {
@@ -196,7 +253,7 @@ public class ProductDAO extends DBContext {
         try {
             String sql1 = "delete from \"Order Details\" where ProductID=?";
             String sql2 = "delete from Products where ProductID = ?";
-            
+
             PreparedStatement ps1 = connection.prepareStatement(sql1);
             PreparedStatement ps2 = connection.prepareStatement(sql2);
 
@@ -223,21 +280,7 @@ public class ProductDAO extends DBContext {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-                int ProductID = rs.getInt("ProductID");
-                String ProductName = rs.getString("ProductName");
-                int CategoryID = rs.getInt("CategoryID");
-                String QuantityPerUnit = rs.getString("QuantityPerUnit");
-                double UnitPrice = rs.getDouble("UnitPrice");
-                int UnitsInStock = rs.getInt("UnitsInStock");
-                int UnitsOnOrder = rs.getInt("UnitsOnOrder");
-                int ReorderLevel = rs.getInt("ReorderLevel");
-                boolean Discontinued = rs.getBoolean("Discontinued");
-                double Discount = rs.getDouble("Discount");
-//                Product p = new Product(ProductID, ProductName, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued);
-                Product pHot = new Product(ProductID, ProductName, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued);
-                proHot.add(pHot);
-            }
+            proHot = parseResultSetToArray(rs);
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -256,21 +299,7 @@ public class ProductDAO extends DBContext {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-                int ProductID = rs.getInt("ProductID");
-                String ProductName = rs.getString("ProductName");
-                int CategoryID = rs.getInt("CategoryID");
-                String QuantityPerUnit = rs.getString("QuantityPerUnit");
-                double UnitPrice = rs.getDouble("UnitPrice");
-                int UnitsInStock = rs.getInt("UnitsInStock");
-                int UnitsOnOrder = rs.getInt("UnitsOnOrder");
-                int ReorderLevel = rs.getInt("ReorderLevel");
-                boolean Discontinued = rs.getBoolean("Discontinued");
-                double Total = rs.getDouble("Total");
-//                Product p = new Product(ProductID, ProductName, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued);
-                Product pBest = new Product(ProductID, ProductName, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued);
-                proBest.add(pBest);
-            }
+            proBest = parseResultSetToArray(rs);
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -284,20 +313,7 @@ public class ProductDAO extends DBContext {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-                int ProductID = rs.getInt("ProductID");
-                String ProductName = rs.getString("ProductName");
-                int CategoryID = rs.getInt("CategoryID");
-                String QuantityPerUnit = rs.getString("QuantityPerUnit");
-                double UnitPrice = rs.getDouble("UnitPrice");
-                int UnitsInStock = rs.getInt("UnitsInStock");
-                int UnitsOnOrder = rs.getInt("UnitsOnOrder");
-                int ReorderLevel = rs.getInt("ReorderLevel");
-                boolean Discontinued = rs.getBoolean("Discontinued");
-//                Product p = new Product(ProductID, ProductName, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued);
-                Product pNew = new Product(ProductID, ProductName, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued);
-                proNew.add(pNew);
-            }
+            proNew = parseResultSetToArray(rs);
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -312,88 +328,48 @@ public class ProductDAO extends DBContext {
             ps.setInt(1, CategoryID);
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-                int ProductID = rs.getInt(1);
-                String ProductName = rs.getString(2);
-                int CategoryID2 = rs.getInt(3);
-                String QuantityPerUnit = rs.getString(4);
-                double UnitPrice = rs.getDouble(5);
-                int UnitsInStock = rs.getInt(6);
-                int UnitsOnOrder = rs.getInt(7);
-                int ReorderLevel = rs.getInt(8);
-                boolean Discontinued = rs.getBoolean(9);
+            proList = parseResultSetToArray(rs);
 
-                Product p = new Product(ProductID, ProductName, CategoryID2, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued);
-                proList.add(p);
-            }
         } catch (SQLException e) {
             System.out.println(e);
         }
         return proList;
     }
 
+    public ArrayList<Product> getProductsByPage(int page, int elements) {
+        ArrayList<Product> product = new ArrayList<>();
+        int start = page * elements - elements;
+        try {
+            String sql = "select * from Products\n"
+                    + "order by ProductID\n"
+                    + "offset ? rows\n"
+                    + "fetch next ? rows only";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, start);
+            ps.setInt(2, elements);
+            ResultSet rs = ps.executeQuery();
+            product = parseResultSetToArray(rs);
+        } catch (Exception e) {
+        }
+        return product;
+    }
+
     public static void main(String[] args) {
         int count = 0;
-//        ArrayList<Product> list = new ProductDAO().getProduct();
-//        for (Product product : list) {
-//            System.out.println(product);
-//        }
-//        ProductDAO pd = new ProductDAO();
-////        
-//        System.out.println("==================");
-//        Product p1 = pd.getProductById(98);
-//        System.out.println(p1);
-//
-//        System.out.println("==========");
-//
-//        p1.setQuantityPerUnit("Chang");
-//        pd.editProductWithoutCategoryID(p1);
-//
-//        System.out.println(p1);
-//        
-//        System.out.println("==================================");
-//        System.out.println("p86 = " + list.get(79));
-//
-//        pd.DeleteProductById(86);
-//        System.out.println("p86 = " + list.get(79));
 
-//        System.out.println("55 = " + pd.getProductById(55));
-//        System.out.println("================================================");
-//        ArrayList<Product> pB = new ProductDAO().getProductBestSale();
-//        for (Product p : pB) {
-//            System.out.println("NAME = " + p.getProductName() + " & PRICE = " + p.getUnitPrice());
-//        }
-//
-//        System.out.println("================================================");
-//        ArrayList<Product> pH = new ProductDAO().getProductHot();
-//        for (Product p : pH) {
-//            System.out.println("NAME = " + p.getProductName() + " & PRICE = " + p.getUnitPrice());
-//        }
-//
-//        System.out.println("================================================");
-//        ArrayList<Product> pN = new ProductDAO().getProductNew();
-//        for (Product p : pN) {
-//            System.out.println("ID = " + p.getProductID() + " & NAME = " + p.getProductName() + " & PRICE = " + p.getUnitPrice());
-//            count++;
-//            if (count == 4) {
-//                break;
-//            }
-//        }
-//        Product p = new Product(100, "ProductName", 8, "QuantityPerUnit", 12345, 123, 12, 1, true);
-//        int check = new ProductDAO().createProduct(p);
-//        System.out.println("check = " + check);
-
-//        ArrayList<Product> list = new ProductDAO().getProduct();
-//        for (Product product : list) {
-//            System.out.println(product);
-//        }
-        
         HashMap<String, String> filters = new HashMap<>();
-        filters.put("CategoryID", "1");
+//        filters.put("CategoryID", "1");
 
-        ArrayList<Product> list = new ProductDAO().getProductByKeyword("ch", filters);
+//        ArrayList<Product> list = new ProductDAO().getProductByKeyword("ch", filters);
+        ArrayList<Product> list = new ProductDAO().getProductByKeywordPaging("d", filters, 1, 2);
+        
         for (Product product : list) {
             System.out.println(product);
         }
+        System.out.println("================================");
+//        ArrayList<Product> list2 = new ProductDAO().getProductsByPage(1, 10);
+//        for (Product product : list2) {
+//            System.out.println(product);
+//        }
     }
 }

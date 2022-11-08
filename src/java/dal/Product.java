@@ -24,6 +24,10 @@ public class Product {
         this.discontinued = Discontinued;
     }
 
+    public Product() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     public int getProductID() {
         return productID;
     }

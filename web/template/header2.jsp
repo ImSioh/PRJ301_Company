@@ -19,6 +19,17 @@
     </head>
     <body>
 
+<%
+            if(request.getSession().getAttribute("accSession")==null) {
+        %>
+        <c:redirect url="error.jsp"></c:redirect>
+        <%  } else { 
+                Account acc = (Account)request.getSession().getAttribute("accSession");
+                if(acc.getRole()==2){
+        %>
+        <c:redirect url="error.jsp"></c:redirect>
+        <%  } else { %>
+
         <div id="container">
             <div id="header">
                 <div id="logo-admin">

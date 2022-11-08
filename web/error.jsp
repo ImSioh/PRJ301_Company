@@ -1,9 +1,3 @@
-<%-- 
-    Document   : Judge
-    Created on : Oct 23, 2022, 10:42:53 PM
-    Author     : Anh
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -15,7 +9,7 @@
             div {
                 text-align: center;
                 margin: 15%;
-                font-family: monospace;
+                /*font-family: monospace;*/
             }
             
             h1 {
@@ -23,15 +17,15 @@
             }
             
             p {
-                font-style: italic;
-                /*font-weight: bold;*/
-                color: gray;
+                /*font-style: italic;*/
+                font-weight: bold;
+                color: black;
             }
         </style>
     </head>
     <body >
         <div>
-            <h1>404 Error Page</h1>
+            <h1>403 Forbidden</h1>
             <p>You do not have permission to access this website!</p>
         </div>
     </body>

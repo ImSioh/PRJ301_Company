@@ -1,4 +1,4 @@
-<%@include file="template/header.jsp" %>
+<%@include file="template/header_log.jsp" %>
 
 <div id="content">
     <div id="form">

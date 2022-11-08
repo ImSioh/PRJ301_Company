@@ -14,19 +14,11 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Asus
- */
 public class OrderDAO extends DBContext {
 
-    public ArrayList<Orders> getAllOrder() {
+    public ArrayList<Orders> parseResultSetToArray(ResultSet rs) {
         ArrayList<Orders> order = new ArrayList<>();
         try {
-            String sql = "select * from Orders";
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
                 int OrderID = rs.getInt("OrderID");
                 String CustomerID = rs.getString("CustomerID");
@@ -46,6 +38,37 @@ public class OrderDAO extends DBContext {
 
                 order.add(o);
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return order;
+    }
+    
+    public int getNumOrders() {
+        int numOrder = -1;
+        try {
+            String sql = "select COUNT(*) from Orders\n";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            rs.next();
+            numOrder = rs.getInt(1);
+            
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return numOrder;
+    }   
+    
+    public ArrayList<Orders> getAllOrder() {
+        ArrayList<Orders> order = new ArrayList<>();
+        try {
+            String sql = "select * from Orders\n"
+                    + "order by OrderDate desc\n";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            order = parseResultSetToArray(rs);
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -106,6 +129,9 @@ public class OrderDAO extends DBContext {
                 }
             }
 
+            sql += "\n";
+            sql += "order by OrderDate desc\n";
+
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(sql_param_counter, "%" + keyword + "%");
 
@@ -125,27 +151,48 @@ public class OrderDAO extends DBContext {
                 }
             }
 
+//            System.out.println(ps.toString());
+//            ps.setString(1, "%" + keyword + "%");
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-                int OrderID = rs.getInt("OrderID");
-                String CustomerID = rs.getString("CustomerID");
-                int EmployeeID = rs.getInt("EmployeeID");
-                Date OrderDate = rs.getDate("OrderDate");
-                Date RequiredDate = rs.getDate("RequiredDate");
-                Date ShippedDate = rs.getDate("ShippedDate");
-                double Freight = rs.getDouble("Freight");
-                String ShipName = rs.getString("ShipName");
-                String ShipAddress = rs.getString("ShipAddress");
-                String ShipCity = rs.getString("ShipCity");
-                String ShipRegion = rs.getString("ShipRegion");
-                String ShipPostalCode = rs.getString("ShipPostalCode");
-                String ShipCountry = rs.getString("ShipCountry");
+            order = parseResultSetToArray(rs);
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return order;
+    }
 
-                Orders o = new Orders(OrderID, CustomerID, EmployeeID, OrderDate, RequiredDate, ShippedDate, Freight, ShipName, ShipAddress, ShipCity, ShipRegion, ShipPostalCode, ShipCountry);
+    public ArrayList<Orders> getAllOrderKeywordPaging(String keyword, HashMap<String, String> filter, int page, int elements) {
+        ArrayList<Orders> order = new ArrayList<>();
+        int start = page * elements - elements;
 
-                order.add(o);
-            }
+        String StartOrderDate = filter.get("StartOrderDate");
+        if (StartOrderDate == null || "".equals(StartOrderDate.trim())) {
+            StartOrderDate = "1900-01-01";
+        }
+        String EndOrderDate = filter.get("EndOrderDate");
+        if (EndOrderDate == null || "".equals(EndOrderDate.trim())) {
+            EndOrderDate = "2100-01-01";
+        }
+
+        try {
+            String sql = "select * from Orders\n"
+                    + "where OrderID like ? \n"
+                    + "and (OrderDate between ? and ?)\n"
+                    + "order by OrderDate desc\n"
+                    + "offset ? rows\n"
+                    + "fetch next ? rows only";
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, "%" + keyword + "%");
+            ps.setString(2, StartOrderDate);
+            ps.setString(3, EndOrderDate);
+            ps.setInt(4, start);
+            ps.setInt(5, elements);
+
+            ResultSet rs = ps.executeQuery();
+
+            order = parseResultSetToArray(rs);
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -240,24 +287,33 @@ public class OrderDAO extends DBContext {
         return rs;
     }
 
+    public ArrayList<Orders> getOrdersByPage(int page, int elements) {
+        ArrayList<Orders> order = new ArrayList<>();
+        int start = page * elements - elements;
+        try {
+            String sql = "select * from Orders\n"
+                    + "order by OrderDate desc\n"
+                    + "offset ? rows\n"
+                    + "fetch next ? rows only";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, start);
+            ps.setInt(2, elements);
+            ResultSet rs = ps.executeQuery();
+            order = parseResultSetToArray(rs);
+        } catch (Exception e) {
+        }
+        return order;
+    }
+
     public static void main(String[] args) {
         HashMap<String, String> filters = new HashMap<>();
 //        filters.put("StartOrderDate", "1997-01-01");
-        filters.put("EndOrderDate", "1998-01-01");
+//        filters.put("EndOrderDate", "1999-01-01");
 
-        ArrayList<Orders> order = new OrderDAO().getAllOrderKeyword("12", filters);
+        ArrayList<Orders> order = new OrderDAO().getAllOrderKeywordPaging("2", filters, 2, 3);
         for (Orders orders : order) {
             System.out.println(orders);
         }
-//        Orders o = new OrderDAO().getOrderById("10303");
-//        System.out.println(o);
 
-        System.out.println("==============================================================");
-//        int rs = new OrderDAO().cancelOrder(11072, "ERNSH");
-//
-//        ArrayList<Orders> orders = new OrderDAO().getOrdersByCustomerID("ERNSH", "all");
-//        for (Orders o : orders) {
-//            System.out.println(o);
-//        }
     }
 }

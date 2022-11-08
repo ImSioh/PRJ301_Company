@@ -13,10 +13,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import models.*;
 
-/**
- *
- * @author phamt
- */
 public class OrderManage extends HttpServlet {
 
     @Override
