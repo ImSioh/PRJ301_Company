@@ -18,8 +18,15 @@
 
                 <label>Unit price:</label><br/>
                 <input type="text" name="txtUnitPrice" id=""><br/>
+                <c:if test="${msgUnitPrice!=null}">
+                    <span class="msg-error">${msgUnitPrice}</span><br/>
+                </c:if>
+
                 <label>Quantity per unit:</label><br/>
                 <input type="text" name="txtQuantityPerUnit" id=""><br/>
+                <c:if test="${msgQuantityPerUnit!=null}">
+                    <span class="msg-error">${msgQuantityPerUnit}</span><br/>
+                </c:if>
 
                 <label>Units in stock (*):</label><br/>
                 <input type="text" name="txtUnitsInStock" id=""><br/>
@@ -27,6 +34,7 @@
                     <span class="msg-error">${msgUnitsInStock}</span><br/>
                 </c:if>
             </div>
+
             <div class="content-main-1">
                 <label>Category (*):</label><br/>
                 <select name="ddlCategory">
@@ -41,6 +49,9 @@
 
                 <label>Reorder level:</label><br/>
                 <input type="text" name="txtReorderLevel" id=""><br/>
+                <c:if test="${msgReorderLevel!=null}">
+                    <span class="msg-error">${msgReorderLevel}</span><br/>
+                </c:if>
 
                 <label>Units on order:</label><br/>
                 <input type="text" name="txtUnitsOnOrder" id="" disabled><br/>
