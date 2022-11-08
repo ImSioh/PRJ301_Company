@@ -11,7 +11,7 @@
             <div id="content-title">
                 <a href="home">Home</a> >
                 <a href="category?id=${c.categoryID}">${c.categoryName}</a> >
-            Model: SP${c.categoryID}
+            Model: SP${p.getProductID()}
         </div>
         <div id="product">
             <div id="product-name">
@@ -32,19 +32,29 @@
                         <div id="product-detail-right-content">
                             <div id="product-price">$ ${p.unitPrice}</div>
                             <div id="product-status">
-                                <c:if test="${p.unitsInStock>0}">In stock</c:if>
-                                <c:if test="${p.unitsInStock<=0}">Out of stock</c:if>
-                                </div>
-
-                                <div id="product-detail-buttons">
-                                    <div id="product-detail-button">
-                                    <c:if test="${sessionScope.accSession==null || sessionScope.accSession.role==2}">
-                                        <input type="button" value="BUY NOW">
-                                        <input type="button" value="ADD TO CART" style="background-color: #fff; color:red;border: 1px solid gray;">
-                                    </c:if>
-                                </div>
+                                <c:if test="${p.unitsInStock>0}">
+                                    <span style="color: ">In stock</span>
+                                </c:if>
+                                <c:if test="${p.unitsInStock<=0}">
+                                    <span style="color: black">Out of stock</span>
+                                </c:if>
                             </div>
 
+                            <c:if test="${sessionScope.accSession==null || sessionScope.accSession.role==2}">
+                                <div id="product-detail-buttons">
+                                    <div id="product-detail-button">
+                                        <a href="cart"><input type="button" value="BUY NOW"></a>
+<!--                                    </div>
+                                    <div id="product-detail-button">-->
+<!--                                        <form action="add-to-cart?num=1&pid=${p.productID}" method="post">
+                                            <input type="submit" value="ADD TO CART" style="background-color: #fff; color:red;border: 1px solid gray;">
+                                        </form>-->
+                                        <form action="" name="f" method="post">
+                                            <input type="button" value="ADD TO CART" onclick="addtocart(${p.productID})" style="background-color: #fff; color:red;border: 1px solid gray;">
+                                        </form>
+                                    </div>
+                                </div>
+                            </c:if>
                         </div>
                     </div>
                 </div>
@@ -61,5 +71,12 @@
         </div>
     </div>
 </div>
-                    
+
 <%@include file="template/footer.jsp" %>
+
+<script type="text/javascript">
+    function addtocart(pid) {
+        document.f.action = "add-to-cart?num=1&pid=" + pid;
+        document.f.submit();
+    }
+</script>

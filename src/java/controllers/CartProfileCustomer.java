@@ -9,9 +9,10 @@ import java.util.Random;
 import dal.*;
 import jakarta.servlet.http.Cookie;
 import java.util.ArrayList;
+import java.util.List;
 import models.*;
 
-public class CartServlet extends HttpServlet {
+public class CartProfileCustomer extends HttpServlet {
 
     private String randomString(int length) {
         Random random = new Random();
@@ -30,17 +31,34 @@ public class CartServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        //CUSTOMER
+        //neu co session thi set info acc va cus,
+        //neu khong co session thi k set info
         if (request.getSession().getAttribute("accSession") != null) {
             Account acc = (Account) request.getSession().getAttribute("accSession");
             String cID = acc.getCustomerID();
             Customer cus = new CustomerDAO().getCustomerById(cID);
 
+            //set thuoc tinh sang jsp
             request.setAttribute("customer", cus);
             request.setAttribute("acc", acc);
         }
-        ArrayList<Product> p = new ProductDAO().getProduct();
 
-        request.setAttribute("product", p);
+        //CART
+        Cart cart = null;
+        //neu co cart roi thi lay ra cart da co
+        if (request.getSession().getAttribute("cartSession") != null) {
+            cart = (Cart) request.getSession().getAttribute("cartSession");
+        } //neu chua co cart thi tao moi cart
+        else {
+            cart = new Cart();
+        }
+        List<Item> list = cart.getItems();
+        int size = !list.isEmpty() ? list.size() : 0;
+        
+        request.getSession().setAttribute("cartSession", cart);
+        request.getSession().setAttribute("totalMoney", cart.getTotalMoney());
+        request.getSession().setAttribute("size", size);
 
         request.getRequestDispatcher("cart.jsp").forward(request, response);
     }
@@ -66,33 +84,11 @@ public class CartServlet extends HttpServlet {
             cus.setAddress(address);
 //            Customer c = new Customer(cusID, compName, contName, contTitle, address);
             int res = new CustomerDAO().createProfile(cus);
-//            if (res != 0) {
-//                //xoa cookie
-////                response.sendRedirect("signin");
-//            } else {
-//                //giu cookie
-//                //yeu cau nhap lai thong tin customer
-////                request.getRequestDispatcher("signup");
-//            }
         } else {
             Account acc = (Account) request.getSession().getAttribute("accSession");
             cus = new CustomerDAO().getCustomerById(acc.getCustomerID());
         }
 
-        //Thao tac voi cart
-        //lay danh sach cookies
-        Cookie[] arr = request.getCookies();
-        //lay tham so truyen vao
-
-        int productID;
-        double unitPrice;
-        int quantity;
-        String productName;
-        
-        productID = Integer.parseInt(request.getParameter("productID"));
-        unitPrice = Double.parseDouble(request.getParameter("unitPrice"));
-        quantity = Integer.parseInt(request.getParameter("quantity"));
-        productName = request.getParameter("productName");
-
+        request.getRequestDispatcher("cart.jsp").forward(request, response);
     }
 }

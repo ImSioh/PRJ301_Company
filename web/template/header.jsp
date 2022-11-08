@@ -51,19 +51,22 @@
                 <%--<c:if test="${pageContext.request.requestURL != 'http://localhost:9999/PRJ301_Company/account/../signin.jsp'
                               && pageContext.request.requestURL != 'http://localhost:9999/PRJ301_Company/account/../signup.jsp'
                               && pageContext.request.requestURL != 'http://localhost:9999/PRJ301_Company/forgot.jsp'}">--%>
-                      <div class="header-search">
-                          <form action="search" id="usersearch">
-                              <input type="text" name="keyword" placeholder="Which product do you want to find?">
-                              <input type="submit" value="Search">
-                          </form>
-                      </div>
+                <div class="header-search">
+                    <form action="search" id="usersearch">
+                        <input style="font-style: italic" type="text" name="keyword" placeholder="Which product do you want to find?...">
+                        <input type="submit" value="Search">
+                    </form>
+                </div>
                 <%--</c:if>--%>
                 <div id="banner">
                     <ul>
-                        <li><a href="<%= path %>/cart">Cart: 0</a></li>
-                            <%
-                                if(session.getAttribute("accSession")==null){
-                            %>
+                        <li>
+                            <img src="<%= path %>/img/cart.png" width="25" height="25" alt="cart"/>
+                            <a href="<%= path %>/cart">Cart: ${size}</a>
+                        </li>
+                        <%
+                            if(session.getAttribute("accSession")==null){
+                        %>
                         <li><a href="<%= path %>/account/signin">SignIn</a></li>
                         <li><a href="<%= path %>/account/signup">SignUp</a></li>
                             <% 

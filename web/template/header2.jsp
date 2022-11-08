@@ -37,7 +37,7 @@
                     <ul>
                         <c:set value="${sessionScope.accSession}" var="acc"/>
                         <c:if test="${acc!=null}">
-                            <li>Profile (<a href="<%= path %>/account/profile">${acc.email}</a>)</li>
+                            <li>Profile (${acc.email})</li>
                             </c:if>
                         <li><a href="account/signin">SignOut</a></li>
                     </ul>
