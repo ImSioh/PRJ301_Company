@@ -36,9 +36,9 @@ public class ProductCreate extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String ProductName = req.getParameter("txtProductName");
         String QuantityPerUnit = req.getParameter("txtQuantityPerUnit");
-        double UnitPrice = Double.parseDouble(req.getParameter("txtUnitPrice"));
+        String UnitPrice_raw = req.getParameter("txtUnitPrice");
+        String ReorderLevel_raw = req.getParameter("txtReorderLevel");
         //int UnitsOnOrder = Integer.parseInt(req.getParameter("txtUnitsOnOrder"));
-        int ReorderLevel = Integer.parseInt(req.getParameter("txtReorderLevel"));
         boolean Discontinued = Boolean.parseBoolean(req.getParameter("chkDiscontinued"));
 
         //raw to validate
@@ -48,6 +48,9 @@ public class ProductCreate extends HttpServlet {
         String msgProductName = "";
         String msgUnitsInStock = "";
         String msgCategory = "";
+        String msgQuantityPerUnit = "";
+        String msgUnitPrice = "";
+        String msgReorderLevel = "";
 
         if (ProductName.equals("")) {
             msgProductName = "Product name is required.";
@@ -61,8 +64,20 @@ public class ProductCreate extends HttpServlet {
             msgCategory = "Category is required.";
             req.setAttribute("msgCategory", msgCategory);
         }
-
-        if (!msgProductName.equals("") || !msgCategory.equals("") || !msgUnitsInStock.equals("")) {
+        if (QuantityPerUnit.equals("")) {
+            msgQuantityPerUnit = "QuantityPerUnit is required.";
+            req.setAttribute("msgQuantityPerUnit", msgQuantityPerUnit);
+        }
+        if (UnitPrice_raw.equals("")) {
+            msgUnitPrice = "UnitPrice is required.";
+            req.setAttribute("msgUnitPrice", msgUnitPrice);
+        }
+        if (ReorderLevel_raw.equals("")) {
+            msgReorderLevel = "ReorderLevel is required.";
+            req.setAttribute("msgReorderLevel", msgReorderLevel);
+        }
+        if (!msgProductName.equals("") || !msgCategory.equals("") || !msgUnitsInStock.equals("")
+                || !msgQuantityPerUnit.equals("") || !msgUnitPrice.equals("") || !msgReorderLevel.equals("")) {
             ArrayList<Category> c = new CategoryDAO().getCategory();
             req.setAttribute("category", c);
             req.getRequestDispatcher("product-create.jsp").forward(req, resp);
@@ -70,6 +85,8 @@ public class ProductCreate extends HttpServlet {
             //get Int input of CateID & UnitsStock
             int CategoryID = Integer.parseInt(req.getParameter("ddlCategory"));
             int UnitsInStock = Integer.parseInt(req.getParameter("txtUnitsInStock"));
+            double UnitPrice = Double.parseDouble(UnitPrice_raw);
+            int ReorderLevel = Integer.parseInt(ReorderLevel_raw);
 
             Product p = new Product(0, ProductName, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, 0, ReorderLevel, Discontinued);
 
