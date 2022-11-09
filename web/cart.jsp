@@ -81,11 +81,26 @@
                     <div id="customer-info-detail">
                         <div id="customer-info-left">
                             <input type="text" name="compName" placeholder="Company name *" value="${cus.companyName}"/><br/>
+                            <c:if test="${msgcompName!=null}">
+                                <span class="msg-error">${msgcompName}</span><br/>
+                            </c:if>
+
                             <input type="text" name="contName" placeholder="Contact name *" value="${cus.contactName}"/><br/>
+                            <c:if test="${msgcontName!=null}">
+                                <span class="msg-error">${msgcontName}</span><br/>
+                            </c:if>
                         </div>
                         <div id="customer-info-right">
                             <input type="text" name="contTitle" placeholder="Contact title *" value="${cus.contactTitle}"/><br/>
+                            <c:if test="${msgcontTitle!=null}">
+                                <span class="msg-error">${msgcontTitle}</span><br/>
+                            </c:if>
+
                             <input type="text" name="address" placeholder="Address *" value="${cus.address}"/><br/>
+                            <c:if test="${msgaddress!=null}">
+                                <span class="msg-error">${msgaddress}</span><br/>
+                            </c:if>
+
                             Required Date<span style="color: red"> *</span>: <br/> 
                             <input type="date" name="requiredDate" value="${requiredDate}" min="${datemin}" max="${datemax}" defaultValue="${datemax}">
                         </div>

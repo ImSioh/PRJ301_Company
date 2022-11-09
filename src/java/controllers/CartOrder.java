@@ -93,13 +93,42 @@ public class CartOrder extends HttpServlet {
             String contTitle = request.getParameter("contTitle");
             String address = request.getParameter("address");
             String cusID = randomString(5);
-            cus.setCustomerID(cusID);
-            cus.setCompanyName(compName);
-            cus.setContactName(contName);
-            cus.setContactTitle(contTitle);
-            cus.setAddress(address);
+
+            //validate
+            String msgcompName = "";
+            String msgcontName = "";
+            String msgcontTitle = "";
+            String msgaddress = "";
+
+            if (compName.equals("")) {
+                msgcompName = "Company name is required.";
+                request.setAttribute("msgcompName", msgcompName);
+            }
+            if (contName.equals("")) {
+                msgcontName = "Contact name is required.";
+                request.setAttribute("msgcontName", msgcontName);
+            }
+            if (contTitle.equals("")) {
+                msgcontTitle = "Contact title is required.";
+                request.setAttribute("msgcontTitle", msgcontTitle);
+            }
+            if (address.equals("")) {
+                msgaddress = "Address is required.";
+                request.setAttribute("msgaddress", msgaddress);
+            }
+            if (!msgcompName.equals("") || !msgcontName.equals("")
+                    || !msgcontTitle.equals("") || !msgaddress.equals("")) {
+                request.getRequestDispatcher("cart.jsp").forward(request, response);
+            } else {
+                cus.setCustomerID(cusID);
+                cus.setCompanyName(compName);
+                cus.setContactName(contName);
+                cus.setContactTitle(contTitle);
+                cus.setAddress(address);
 //            Customer c = new Customer(cusID, compName, contName, contTitle, address);
-            checkCus = new CustomerDAO().createProfile(cus);
+                checkCus = new CustomerDAO().createProfile(cus);
+            }
+
         } else {
             Account acc = (Account) request.getSession().getAttribute("accSession");
             cus = new CustomerDAO().getCustomerById(acc.getCustomerID());
