@@ -116,6 +116,7 @@ public class CartOrder extends HttpServlet {
                 msgaddress = "Address is required.";
                 request.setAttribute("msgaddress", msgaddress);
             }
+            
             if (!msgcompName.equals("") || !msgcontName.equals("")
                     || !msgcontTitle.equals("") || !msgaddress.equals("")) {
                 request.getRequestDispatcher("cart.jsp").forward(request, response);

@@ -33,19 +33,52 @@ public class AccountProfileEdit extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         String cusID = request.getParameter("id");
         String compName = request.getParameter("compName");
         String contName = request.getParameter("contName");
         String contTitle = request.getParameter("contTitle");
         String address = request.getParameter("address");
-//        String email = request.getParameter("email");
+        String email = request.getParameter("email");
 
-        Customer c = new Customer(cusID, compName, contName, contTitle, address);
+        //validate
+        String msgcompName = "";
+        String msgcontName = "";
+        String msgcontTitle = "";
+        String msgaddress = "";
 
-        if (new CustomerDAO().editProfile(c) != 0) {
-            response.sendRedirect("profile");
+        Account acc = (Account) request.getSession().getAttribute("accSession");
+        request.setAttribute("acc", acc);
+        Customer cus = new Customer(cusID, compName, contName, contTitle, address);
+        request.setAttribute("customer", cus);
+
+        if (compName.equals("")) {
+            msgcompName = "Company name is required.";
+            request.setAttribute("msgcompName", msgcompName);
+        }
+        if (contName.equals("")) {
+            msgcontName = "Contact name is required.";
+            request.setAttribute("msgcontName", msgcontName);
+        }
+        if (contTitle.equals("")) {
+            msgcontTitle = "Contact title is required.";
+            request.setAttribute("msgcontTitle", msgcontTitle);
+        }
+        if (address.equals("")) {
+            msgaddress = "Address is required.";
+            request.setAttribute("msgaddress", msgaddress);
+        }
+
+        if (!msgcompName.equals("") || !msgcontName.equals("")
+                || !msgcontTitle.equals("") || !msgaddress.equals("")) {
+            request.getRequestDispatcher("../profile-edit.jsp").forward(request, response);
         } else {
-            request.getRequestDispatcher("profile-edit");
+
+            if (new CustomerDAO().editProfile(cus) != 0) {
+                response.sendRedirect("profile");
+            } else {
+                request.getRequestDispatcher("profile-edit");
+            }
         }
     }
 }
